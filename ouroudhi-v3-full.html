@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عُروضي – عروض الأثاث في مناسباتك</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   ROOT & RESET
+═══════════════════════════════════════ */
+:root {
+  --bg:       #0D0D0D;
+  --bg2:      #141414;
+  --bg3:      #1C1C1C;
+  --bg4:      #242424;
+  --border:   rgba(255,255,255,0.07);
+  --borderH:  rgba(255,255,255,0.14);
+  --text:     #F0EDE8;
+  --muted:    rgba(240,237,232,0.50);
+  --dim:      rgba(240,237,232,0.28);
+  --gold:     #C9963A;
+  --goldL:    #E8B55A;
+  --goldP:    rgba(201,150,58,0.12);
+  --goldG:    rgba(201,150,58,0.28);
+  --green:    #3A8C5A;
+  --greenL:   #5FC47A;
+  --red:      #C94040;
+  --redL:     #E87A7A;
+  --blue:     #5A7EC9;
+  --blueL:    #7FA8E8;
+  --r:        14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;cursor:none;}
+button,input,select,textarea{font-family:'Cairo',sans-serif;}
+a{text-decoration:none;color:inherit;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.02;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px;}
+
+/* ═══ CURSOR ═══ */
+.cur{width:8px;height:8px;background:var(--gold);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transition:transform .1s;}
+.curR{width:30px;height:30px;border:1px solid var(--gold);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;opacity:.5;transition:width .3s,height .3s;}
+
+/* ═══════════════════════════════════════
+   PAGES SYSTEM
+═══════════════════════════════════════ */
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
+
+/* ═══════════════════════════════════════
+   HEADER (shared)
+═══════════════════════════════════════ */
+.header{
+  position:fixed;top:0;width:100%;z-index:300;
+  height:64px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+  background:rgba(13,13,13,.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.logo{font-family:'Tajawal',sans-serif;font-size:26px;font-weight:900;color:var(--text);}
+.logo em{color:var(--gold);font-style:normal;}
+.header-nav{display:flex;align-items:center;gap:28px;}
+.header-nav a{font-size:14px;color:var(--muted);transition:color .2s;}
+.header-nav a:hover{color:var(--text);}
+
+/* Store login icon button */
+.store-btn{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg3);border:1px solid var(--border);
+  padding:8px 18px;border-radius:8px;
+  font-size:13px;font-weight:600;color:var(--muted);
+  cursor:none;transition:all .25s;
+}
+.store-btn:hover{border-color:rgba(201,150,58,.4);color:var(--goldL);}
+.store-btn svg{width:16px;height:16px;opacity:.6;}
+
+/* ═══════════════════════════════════════
+   PAGE 1 — END USER (HOMEPAGE)
+═══════════════════════════════════════ */
+#page-home{padding-top:64px;}
+
+/* Hero */
+.hero{
+  min-height:88vh;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;text-align:center;
+  padding:80px 48px 60px;position:relative;overflow:hidden;
+}
+.hero-glow{position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:800px;height:500px;pointer-events:none;
+  background:radial-gradient(ellipse,rgba(201,150,58,.1) 0%,transparent 70%);}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:9px;
+  background:var(--goldP);border:1px solid rgba(201,150,58,.3);
+  padding:7px 18px;border-radius:100px;
+  font-size:13px;font-weight:600;color:var(--goldL);
+  margin-bottom:32px;animation:fadeUp .8s ease both;
+}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.hero h1{font-family:'Tajawal',sans-serif;font-size:clamp(40px,6vw,78px);font-weight:900;line-height:1.1;animation:fadeUp .9s .1s ease both;}
+.hero h1 span{color:var(--gold);display:block;}
+.hero-sub{margin-top:18px;max-width:500px;font-size:17px;line-height:1.9;color:var(--muted);animation:fadeUp 1s .2s ease both;}
+
+/* Occasion tabs */
+.occ-tabs{
+  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
+  margin-top:44px;animation:fadeUp 1s .3s ease both;
+}
+.occ-tab{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 20px;border-radius:10px;
+  background:var(--bg3);border:1px solid var(--border);
+  font-size:13px;font-weight:600;color:var(--muted);
+  cursor:none;transition:all .25s;
+}
+.occ-tab:hover{border-color:var(--borderH);color:var(--text);}
+.occ-tab.now{background:var(--goldP);border-color:rgba(201,150,58,.4);color:var(--goldL);}
+.occ-tab.now .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+.occ-tab.soon{border-color:rgba(90,126,201,.3);color:var(--blueL);}
+
+/* Deals Grid */
+.deals-section{padding:60px 48px 80px;}
+.ds-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:36px;}
+.ds-title{font-family:'Tajawal',sans-serif;font-size:clamp(24px,3vw,36px);font-weight:800;}
+.ds-title small{display:block;font-family:'Cairo',sans-serif;font-size:13px;font-weight:400;color:var(--muted);margin-bottom:4px;}
+.see-all{font-size:13px;color:var(--gold);display:flex;align-items:center;gap:6px;transition:gap .2s;}
+.see-all:hover{gap:10px;}
+
+.deals-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+
+.deal-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r);overflow:hidden;
+  transition:transform .3s,border-color .3s;cursor:none;
+}
+.deal-card:hover{transform:translateY(-5px);border-color:rgba(201,150,58,.3);}
+.deal-card.big{grid-column:span 2;}
+
+.dc-thumb{
+  height:170px;display:flex;align-items:center;justify-content:center;
+  font-size:56px;position:relative;
+  background:var(--bg3);
+}
+.deal-card.big .dc-thumb{height:240px;font-size:72px;}
+.dc-disc{
+  position:absolute;top:12px;right:12px;
+  background:var(--red);color:#fff;
+  padding:4px 10px;border-radius:5px;font-size:11px;font-weight:800;
+}
+.dc-store-tag{
+  position:absolute;top:12px;left:12px;
+  background:rgba(13,13,13,.8);border:1px solid var(--border);
+  padding:4px 10px;border-radius:5px;font-size:11px;font-weight:600;color:var(--muted);
+  backdrop-filter:blur(8px);
+}
+.dc-body{padding:16px 18px;}
+.dc-store{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
+.dc-name{font-size:14px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:11px;}
+.deal-card.big .dc-name{font-size:18px;}
+.dc-price{display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
+.dc-now{font-family:'Tajawal',sans-serif;font-size:20px;font-weight:800;color:var(--goldL);}
+.deal-card.big .dc-now{font-size:28px;}
+.dc-was{font-size:12px;color:var(--dim);text-decoration:line-through;}
+.dc-save{padding:2px 8px;border-radius:4px;background:rgba(201,58,58,.12);color:var(--redL);font-size:10px;font-weight:700;}
+.dc-footer{
+  padding:11px 18px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.dc-exp{font-size:11px;color:var(--dim);}
+.dc-exp strong{color:var(--redL);}
+.dc-save-btn{
+  background:none;border:1px solid var(--border);
+  padding:5px 13px;border-radius:6px;
+  font-size:12px;font-weight:600;color:var(--muted);
+  cursor:none;transition:all .2s;
+}
+.dc-save-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* Occasion timeline strip */
+.timeline-strip{padding:0 48px 80px;}
+.ts-title{font-family:'Tajawal',sans-serif;font-size:28px;font-weight:800;margin-bottom:28px;}
+.ts-title small{display:block;font-size:14px;font-weight:400;color:var(--muted);font-family:'Cairo',sans-serif;margin-bottom:4px;}
+
+.ts-list{display:flex;flex-direction:column;gap:0;position:relative;padding-right:28px;}
+.ts-list::before{content:'';position:absolute;top:0;bottom:0;right:0;width:2px;background:linear-gradient(to bottom,var(--gold),rgba(201,150,58,.05));}
+
+.ts-item{
+  display:flex;align-items:center;gap:20px;
+  padding:18px 0;border-bottom:1px solid var(--border);
+  cursor:none;transition:all .2s;
+  position:relative;
+}
+.ts-item::before{
+  content:'';position:absolute;right:-36px;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--border);
+  transition:all .3s;
+}
+.ts-item.now::before{background:var(--gold);border-color:var(--gold);box-shadow:0 0 14px var(--goldG);}
+.ts-item.soon::before{background:var(--bg3);border-color:var(--blue);}
+.ts-item.past::before{background:var(--bg3);border-color:var(--border);}
+.ts-item:hover{padding-right:10px;}
+.ts-emoji{font-size:26px;flex-shrink:0;width:44px;text-align:center;}
+.ts-info{flex:1;}
+.ts-name{font-size:16px;font-weight:700;color:var(--text);}
+.ts-date{font-size:12px;color:var(--dim);margin-top:2px;}
+.ts-meta{display:flex;gap:10px;align-items:center;}
+.ts-badge{
+  padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;
+}
+.badge-now{background:var(--goldP);color:var(--goldL);border:1px solid rgba(201,150,58,.25);}
+.badge-soon{background:rgba(90,126,201,.1);color:var(--blueL);border:1px solid rgba(90,126,201,.2);}
+.badge-past{background:var(--bg3);color:var(--dim);border:1px solid var(--border);}
+.ts-count{font-size:12px;color:var(--dim);}
+.ts-count strong{color:var(--goldL);}
+.ts-arrow{color:var(--dim);transition:all .2s;}
+.ts-item:hover .ts-arrow{color:var(--gold);transform:translateX(-4px);}
+
+/* ═══════════════════════════════════════
+   PAGE 2 — STORE LOGIN
+═══════════════════════════════════════ */
+#page-login{
+  display:none;min-height:100vh;
+  align-items:center;justify-content:center;
+  background:var(--bg);
+  position:relative;overflow:hidden;
+}
+#page-login.active{display:flex;}
+#page-login::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 40%,rgba(201,150,58,.08),transparent 60%);
+}
+
+.login-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:20px;padding:52px 48px;
+  width:100%;max-width:440px;
+  position:relative;z-index:1;
+}
+.login-back{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--dim);cursor:none;
+  margin-bottom:36px;transition:color .2s;
+}
+.login-back:hover{color:var(--muted);}
+.login-icon{font-size:44px;margin-bottom:20px;text-align:center;}
+.login-title{font-family:'Tajawal',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px;text-align:center;}
+.login-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:36px;line-height:1.7;}
+
+.form-group{margin-bottom:20px;}
+.form-label{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px;display:block;}
+.form-input{
+  width:100%;background:var(--bg3);
+  border:1px solid var(--border);border-radius:9px;
+  padding:13px 16px;font-size:15px;color:var(--text);
+  outline:none;transition:border-color .25s,box-shadow .25s;
+}
+.form-input::placeholder{color:var(--dim);}
+.form-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--goldP);}
+.form-input.has-icon{padding-left:46px;}
+
+.input-wrap{position:relative;}
+.input-icon{
+  position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  font-size:17px;opacity:.5;pointer-events:none;
+}
+.eye-btn{
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  background:none;border:none;font-size:16px;cursor:none;opacity:.5;
+  transition:opacity .2s;
+}
+.eye-btn:hover{opacity:1;}
+
+.login-btn{
+  width:100%;background:var(--gold);color:#0D0D0D;
+  border:none;padding:15px;border-radius:10px;
+  font-size:16px;font-weight:700;cursor:none;
+  transition:all .25s;margin-top:8px;
+  box-shadow:0 6px 24px var(--goldG);
+}
+.login-btn:hover{background:var(--goldL);transform:translateY(-1px);}
+
+.login-hint{
+  text-align:center;margin-top:20px;
+  font-size:12px;color:var(--dim);line-height:1.8;
+}
+.login-hint a{color:var(--gold);}
+
+.login-demo{
+  margin-top:24px;padding:14px 16px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:9px;
+  font-size:12px;color:var(--dim);line-height:1.9;
+}
+.login-demo strong{color:var(--muted);}
+
+/* ═══════════════════════════════════════
+   PAGE 3 — STORE DASHBOARD
+═══════════════════════════════════════ */
+#page-dashboard{display:none;padding-top:64px;}
+#page-dashboard.active{display:block;}
+
+/* Dashboard header strip */
+.dash-topbar{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:20px 48px;display:flex;align-items:center;gap:20px;
+  flex-wrap:wrap;
+}
+.dash-store-info{display:flex;align-items:center;gap:14px;}
+.dash-store-avatar{
+  width:48px;height:48px;border-radius:10px;
+  background:var(--goldP);border:1px solid rgba(201,150,58,.3);
+  display:flex;align-items:center;justify-content:center;font-size:24px;
+}
+.dash-store-name{font-family:'Tajawal',sans-serif;font-size:20px;font-weight:800;}
+.dash-store-plan{font-size:11px;padding:3px 10px;border-radius:100px;background:var(--goldP);color:var(--goldL);border:1px solid rgba(201,150,58,.25);}
+.dash-stats{display:flex;gap:24px;margin-right:auto;flex-wrap:wrap;}
+.ds-stat{display:flex;flex-direction:column;align-items:center;}
+.ds-stat-num{font-family:'Tajawal',sans-serif;font-size:22px;font-weight:800;color:var(--goldL);}
+.ds-stat-lbl{font-size:11px;color:var(--dim);}
+.dash-logout{background:none;border:1px solid var(--border);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);cursor:none;transition:all .2s;}
+.dash-logout:hover{border-color:var(--red);color:var(--redL);}
+
+/* Dashboard body */
+.dash-body{padding:40px 48px;display:grid;grid-template-columns:1fr 360px;gap:32px;}
+
+/* Occasions list */
+.dash-occasions{display:flex;flex-direction:column;gap:16px;}
+.dash-sec-title{font-family:'Tajawal',sans-serif;font-size:22px;font-weight:800;margin-bottom:24px;}
+
+.docc-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r);overflow:hidden;transition:border-color .3s;
+}
+.docc-card.active-occ{border-color:rgba(201,150,58,.35);}
+.docc-head{
+  display:flex;align-items:center;gap:16px;
+  padding:18px 22px;cursor:none;
+}
+.docc-emoji{font-size:26px;flex-shrink:0;}
+.docc-info{flex:1;}
+.docc-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.docc-date{font-size:12px;color:var(--dim);}
+.docc-status{padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;}
+.docc-actions{display:flex;gap:10px;align-items:center;}
+.btn-add-deal{
+  background:var(--gold);color:#0D0D0D;
+  padding:7px 18px;border-radius:7px;border:none;
+  font-size:12px;font-weight:700;cursor:none;transition:all .25s;
+  white-space:nowrap;
+}
+.btn-add-deal:hover{background:var(--goldL);}
+.btn-view-deals{
+  background:none;border:1px solid var(--border);
+  padding:7px 14px;border-radius:7px;
+  font-size:12px;font-weight:600;color:var(--muted);cursor:none;transition:all .2s;
+}
+.btn-view-deals:hover{border-color:var(--borderH);color:var(--text);}
+
+/* Deals inside occasion card */
+.docc-deals{
+  border-top:1px solid var(--border);
+  padding:16px 22px;display:none;
+  flex-direction:column;gap:12px;
+}
+.docc-card.open .docc-deals{display:flex;}
+.ddeal-row{
+  display:flex;align-items:center;gap:14px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:9px;padding:12px 16px;
+  transition:border-color .2s;
+}
+.ddeal-row:hover{border-color:var(--borderH);}
+.ddeal-emoji{font-size:22px;}
+.ddeal-info{flex:1;}
+.ddeal-name{font-size:13px;font-weight:600;color:var(--text);}
+.ddeal-price{font-size:12px;color:var(--dim);margin-top:2px;}
+.ddeal-price strong{color:var(--goldL);}
+.ddeal-disc{padding:2px 8px;border-radius:4px;background:rgba(201,58,58,.12);color:var(--redL);font-size:10px;font-weight:700;}
+.ddeal-actions{display:flex;gap:8px;}
+.icon-btn{background:none;border:1px solid var(--border);width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:none;transition:all .2s;}
+.icon-btn:hover{border-color:var(--borderH);}
+.icon-btn.del:hover{border-color:var(--red);background:rgba(201,58,58,.08);}
+
+.docc-empty{
+  text-align:center;padding:24px 0;
+  font-size:13px;color:var(--dim);
+}
+
+/* ── Add Deal Modal ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;
+  padding:20px;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:20px;padding:40px;width:100%;max-width:520px;
+  position:relative;animation:modalIn .35s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.92) translateY(20px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-close{
+  position:absolute;top:18px;left:18px;
+  background:var(--bg3);border:1px solid var(--border);
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;cursor:none;color:var(--muted);transition:all .2s;
+}
+.modal-close:hover{background:var(--bg4);color:var(--text);}
+.modal-title{font-family:'Tajawal',sans-serif;font-size:22px;font-weight:800;margin-bottom:4px;}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:28px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-select{
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  border-radius:9px;padding:13px 16px;font-size:14px;color:var(--text);
+  outline:none;transition:border-color .25s;appearance:none;
+}
+.form-select:focus{border-color:var(--gold);}
+option{background:var(--bg3);}
+.modal-actions{display:flex;gap:12px;margin-top:28px;}
+.modal-submit{
+  flex:1;background:var(--gold);color:#0D0D0D;
+  border:none;padding:13px;border-radius:9px;
+  font-size:15px;font-weight:700;cursor:none;transition:all .25s;
+}
+.modal-submit:hover{background:var(--goldL);}
+.modal-cancel{
+  background:none;border:1px solid var(--border);
+  padding:13px 20px;border-radius:9px;
+  font-size:14px;color:var(--muted);cursor:none;transition:all .2s;
+}
+.modal-cancel:hover{border-color:var(--borderH);color:var(--text);}
+
+/* ── Side panel ── */
+.dash-side{display:flex;flex-direction:column;gap:20px;}
+.side-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:22px;}
+.side-card-title{font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:18px;}
+
+/* Upcoming occasions mini */
+.upc-list{display:flex;flex-direction:column;gap:12px;}
+.upc-item{display:flex;align-items:center;gap:12px;}
+.upc-emoji{font-size:20px;}
+.upc-info{flex:1;}
+.upc-name{font-size:13px;font-weight:600;color:var(--text);}
+.upc-date{font-size:11px;color:var(--dim);}
+.upc-days{font-size:12px;font-weight:700;color:var(--goldL);white-space:nowrap;}
+
+/* Performance mini chart */
+.perf-bars{display:flex;gap:8px;align-items:flex-end;height:80px;margin-bottom:12px;}
+.perf-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.perf-bar{width:100%;border-radius:4px 4px 0 0;background:var(--goldP);border:1px solid rgba(201,150,58,.2);transition:height .5s ease;}
+.perf-bar.hi{background:var(--goldP);border-color:rgba(201,150,58,.4);}
+.perf-lbl{font-size:9px;color:var(--dim);text-align:center;}
+
+.notif-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.notif-item:last-child{border-bottom:none;}
+.notif-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px;}
+.notif-text{font-size:12px;color:var(--muted);line-height:1.6;}
+.notif-time{font-size:10px;color:var(--dim);margin-top:2px;}
+
+/* ═══════════════════════════════════════
+   FOOTER (homepage only)
+═══════════════════════════════════════ */
+.footer{
+  background:var(--bg2);border-top:1px solid var(--border);
+  padding:44px 48px 24px;
+}
+.footer-row{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;flex-wrap:wrap;padding-bottom:32px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+.footer-brand .logo{font-size:22px;display:block;margin-bottom:10px;}
+.footer-brand p{font-size:13px;color:var(--dim);max-width:240px;line-height:1.7;}
+.footer-links-group{display:flex;gap:52px;}
+.flg h5{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:14px;}
+.flg ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.flg ul li a{font-size:13px;color:var(--dim);transition:color .2s;}
+.flg ul li a:hover{color:var(--gold);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;}
+.footer-bottom p{font-size:12px;color:var(--dim);}
+.socials{display:flex;gap:9px;}
+.soc{width:32px;height:32px;border-radius:7px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:none;transition:all .2s;}
+.soc:hover{background:var(--goldP);border-color:rgba(201,150,58,.3);}
+
+/* ═══ TOAST ═══ */
+.toast{
+  position:fixed;bottom:26px;left:50%;
+  transform:translateX(-50%) translateY(70px);
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--text);padding:12px 22px;border-radius:9px;
+  font-size:14px;font-weight:600;
+  border-right:3px solid var(--gold);
+  z-index:9999;transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+  white-space:nowrap;pointer-events:none;
+}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ═══ UTILS ═══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:900px){
+  .header,.hero,.deals-section,.timeline-strip,.dash-body,.dash-topbar,.footer{padding-right:20px;padding-left:20px;}
+  .deals-grid{grid-template-columns:1fr 1fr;}
+  .deal-card.big{grid-column:span 1;}
+  .dash-body{grid-template-columns:1fr;}
+  .dash-side{display:none;}
+  nav a{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cur" id="cur"></div>
+<div class="curR" id="curR"></div>
+
+<!-- ══════════════════════════════════
+     SHARED HEADER
+══════════════════════════════════ -->
+<header class="header" id="main-header">
+  <div class="logo">عُروضي<em>.</em></div>
+  <nav class="header-nav">
+    <a href="#" onclick="showPage('home')">الرئيسية</a>
+    <a href="#">المناسبات</a>
+    <a href="#">المحلات</a>
+  </nav>
+  <!-- Store login icon -->
+  <button class="store-btn" onclick="showPage('login')" id="store-login-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
+      <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+    </svg>
+    دخول المحلات
+  </button>
+</header>
+
+<!-- ══════════════════════════════════
+     PAGE 1 — HOMEPAGE (END USER)
+══════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-badge">
+      <span class="live-dot"></span>
+      عروض نشطة الآن · عيد الفطر ١٤٤٧
+    </div>
+    <h1>
+      عروض الأثاث
+      <span>في كل مناسبة 🛋️</span>
+    </h1>
+    <p class="hero-sub">كل عروض محلات الأثاث في الرياض — مرتّبة حسب المناسبة، محدّثة من المحلات مباشرةً.</p>
+
+    <!-- Occasion quick tabs -->
+    <div class="occ-tabs">
+      <div class="occ-tab now"><span class="dot"></span>عيد الفطر 🎊</div>
+      <div class="occ-tab soon">يوم التأسيس 🏛️</div>
+      <div class="occ-tab soon">رمضان 🌙</div>
+      <div class="occ-tab">اليوم الوطني 🇸🇦</div>
+      <div class="occ-tab">عودة المدارس 🎒</div>
+      <div class="occ-tab">عيد الأضحى 🐑</div>
+      <div class="occ-tab">يوم الأم 🌹</div>
+    </div>
+  </section>
+
+  <!-- Deals Grid -->
+  <section class="deals-section">
+    <div class="ds-header">
+      <div class="ds-title">
+        <small>عيد الفطر ١٤٤٧ · عروض نشطة</small>
+        أبرز العروض 🔥
+      </div>
+      <a href="#" class="see-all">عرض الكل ←</a>
+    </div>
+
+    <div class="deals-grid">
+
+      <!-- Big featured deal -->
+      <div class="deal-card big">
+        <div class="dc-thumb" style="background:linear-gradient(135deg,#1e1a14,#2a2318);">
+          🛋️
+          <div class="dc-disc">-٤٠٪</div>
+          <div class="dc-store-tag">🛋️ هوم سنتر</div>
+        </div>
+        <div class="dc-body">
+          <div class="dc-store">هوم سنتر</div>
+          <div class="dc-name">طقم كنب ملكي ٧ قطع – جلد إيطالي أصلي، متعدد الألوان</div>
+          <div class="dc-price">
+            <span class="dc-now">٥٬٩٩٠ ر.س</span>
+            <span class="dc-was">٩٬٩٩٩ ر.س</span>
+            <span class="dc-save">وفّر ٤٬٠٠٩</span>
+          </div>
+        </div>
+        <div class="dc-footer">
+          <span class="dc-exp">ينتهي خلال <strong>٣ أيام</strong></span>
+          <button class="dc-save-btn" onclick="showToast('✅ تم حفظ العرض!')">حفظ العرض</button>
+        </div>
+      </div>
+
+      <div class="deal-card">
+        <div class="dc-thumb" style="background:linear-gradient(135deg,#141e14,#1a2a1a);">
+          🛏️<div class="dc-disc">-٢٥٪</div><div class="dc-store-tag">🔵 إيكيا</div>
+        </div>
+        <div class="dc-body">
+          <div class="dc-store">إيكيا الرياض</div>
+          <div class="dc-name">غرفة نوم كاملة مع مرتبة ذكية</div>
+          <div class="dc-price"><span class="dc-now">٢٬٢٥٠ ر.س</span><span class="dc-was">٣٬٠٠٠</span></div>
+        </div>
+        <div class="dc-footer">
+          <span class="dc-exp">ينتهي <strong>الجمعة</strong></span>
+          <button class="dc-save-btn" onclick="showToast('✅ تم حفظ العرض!')">حفظ</button>
+        </div>
+      </div>
+
+      <div class="deal-card">
+        <div class="dc-thumb" style="background:linear-gradient(135deg,#1e1814,#2a2018);">
+          🪑<div class="dc-disc">-٣٠٪</div><div class="dc-store-tag">🟤 ساكو</div>
+        </div>
+        <div class="dc-body">
+          <div class="dc-store">ساكو</div>
+          <div class="dc-name">طاولة طعام خشب زان + ٨ كراسي</div>
+          <div class="dc-price"><span class="dc-now">١٬٧٥٠ ر.س</span><span class="dc-was">٢٬٥٠٠</span></div>
+        </div>
+        <div class="dc-footer">
+          <span class="dc-exp">ينتهي <strong>السبت</strong></span>
+          <button class="dc-save-btn" onclick="showToast('✅ تم حفظ العرض!')">حفظ</button>
+        </div>
+      </div>
+
+      <div class="deal-card">
+        <div class="dc-thumb" style="background:linear-gradient(135deg,#14181e,#18202a);">
+          🪴<div class="dc-disc">-٤٥٪</div><div class="dc-store-tag">✨ ريدان</div>
+        </div>
+        <div class="dc-body">
+          <div class="dc-store">ريدان</div>
+          <div class="dc-name">مجموعة ديكور منزلية ١٥ قطعة</div>
+          <div class="dc-price"><span class="dc-now">٤٩٠ ر.س</span><span class="dc-was">٨٩٠</span></div>
+        </div>
+        <div class="dc-footer">
+          <span class="dc-exp">آخر <strong>٢٠ قطعة</strong></span>
+          <button class="dc-save-btn" onclick="showToast('✅ تم حفظ العرض!')">حفظ</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Timeline strip -->
+  <section class="timeline-strip">
+    <div class="ts-title">
+      <small>تقويم المناسبات</small>
+      مناسبات طوال السنة
+    </div>
+    <div class="ts-list">
+      <div class="ts-item now">
+        <span class="ts-emoji">🎊</span>
+        <div class="ts-info">
+          <div class="ts-name">عيد الفطر ١٤٤٧</div>
+          <div class="ts-date">أوائل أبريل ٢٠٢٦</div>
+        </div>
+        <div class="ts-meta">
+          <span class="ts-badge badge-now">نشط الآن</span>
+          <span class="ts-count"><strong>٤١</strong> عرض · <strong>١٨</strong> محل</span>
+        </div>
+        <span class="ts-arrow">←</span>
+      </div>
+      <div class="ts-item soon">
+        <span class="ts-emoji">🏛️</span>
+        <div class="ts-info"><div class="ts-name">يوم التأسيس</div><div class="ts-date">٢٢ فبراير ٢٠٢٦</div></div>
+        <div class="ts-meta"><span class="ts-badge badge-soon">قادم · ٣٢ يوم</span><span class="ts-count"><strong>١٦</strong> محل مسجّل</span></div>
+        <span class="ts-arrow">←</span>
+      </div>
+      <div class="ts-item soon">
+        <span class="ts-emoji">🌙</span>
+        <div class="ts-info"><div class="ts-name">رمضان ١٤٤٧</div><div class="ts-date">مارس ٢٠٢٦</div></div>
+        <div class="ts-meta"><span class="ts-badge badge-soon">قادم</span><span class="ts-count"><strong>٣٢</strong> محل مسجّل</span></div>
+        <span class="ts-arrow">←</span>
+      </div>
+      <div class="ts-item">
+        <span class="ts-emoji">🐑</span>
+        <div class="ts-info"><div class="ts-name">عيد الأضحى</div><div class="ts-date">يونيو ٢٠٢٦</div></div>
+        <div class="ts-meta"><span class="ts-badge badge-soon">قادم</span><span class="ts-count"><strong>٣٨</strong> محل مسجّل</span></div>
+        <span class="ts-arrow">←</span>
+      </div>
+      <div class="ts-item">
+        <span class="ts-emoji">🎒</span>
+        <div class="ts-info"><div class="ts-name">عودة المدارس</div><div class="ts-date">أغسطس ٢٠٢٦</div></div>
+        <div class="ts-meta"><span class="ts-badge badge-soon">قادم</span><span class="ts-count"><strong>٢٤</strong> محل مسجّل</span></div>
+        <span class="ts-arrow">←</span>
+      </div>
+      <div class="ts-item">
+        <span class="ts-emoji">🇸🇦</span>
+        <div class="ts-info"><div class="ts-name">اليوم الوطني ٩٦</div><div class="ts-date">٢٣ سبتمبر ٢٠٢٦</div></div>
+        <div class="ts-meta"><span class="ts-badge badge-soon">قادم</span><span class="ts-count"><strong>٥٢</strong> محل مسجّل</span></div>
+        <span class="ts-arrow">←</span>
+      </div>
+      <div class="ts-item">
+        <span class="ts-emoji">🌹</span>
+        <div class="ts-info"><div class="ts-name">يوم الأم</div><div class="ts-date">٢١ مارس ٢٠٢٦</div></div>
+        <div class="ts-meta"><span class="ts-badge badge-soon">قادم</span><span class="ts-count"><strong>٩</strong> محل مسجّل</span></div>
+        <span class="ts-arrow">←</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-row">
+      <div class="footer-brand">
+        <div class="logo">عُروضي<em>.</em></div>
+        <p>منصة عروض الأثاث الأولى المنظّمة حسب المناسبات في الرياض.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="flg">
+          <h5>للمتسوقين</h5>
+          <ul><li><a href="#">العروض الحالية</a></li><li><a href="#">المناسبات</a></li><li><a href="#">المحلات</a></li></ul>
+        </div>
+        <div class="flg">
+          <h5>للمحلات</h5>
+          <ul><li><a href="#" onclick="showPage('login');return false;">تسجيل الدخول</a></li><li><a href="#">الباقات</a></li><li><a href="#">الدعم</a></li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© ٢٠٢٦ عُروضي · الرياض</p>
+      <div class="socials">
+        <div class="soc" onclick="showToast('𝕏 تابعنا!')">𝕏</div>
+        <div class="soc" onclick="showToast('📸 إنستقرام!')">📷</div>
+        <div class="soc" onclick="showToast('💬 واتساب!')">💬</div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 2 — STORE LOGIN
+══════════════════════════════════ -->
+<div class="page" id="page-login">
+  <div class="login-card">
+    <div class="login-back" onclick="showPage('home')">← العودة للرئيسية</div>
+    <div class="login-icon">🏪</div>
+    <h2 class="login-title">دخول المحلات</h2>
+    <p class="login-sub">أدخل بيانات حسابك لإدارة عروضك في المناسبات</p>
+
+    <div class="form-group">
+      <label class="form-label">اسم المستخدم</label>
+      <div class="input-wrap">
+        <span class="input-icon">👤</span>
+        <input class="form-input" style="padding-right:46px;" type="text" placeholder="مثال: homecenter_riyadh" id="login-user">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">كلمة المرور</label>
+      <div class="input-wrap">
+        <span class="input-icon" style="right:16px;left:auto;">🔒</span>
+        <input class="form-input" style="padding-right:46px;" type="password" placeholder="••••••••" id="login-pass">
+        <button class="eye-btn" onclick="togglePass()" id="eye-btn">👁️</button>
+      </div>
+    </div>
+
+    <button class="login-btn" onclick="doLogin()">تسجيل الدخول</button>
+
+    <div class="login-hint">
+      ليس لديك حساب؟ <a href="#" onclick="showToast('📩 سيتواصل معك فريقنا!')">تواصل معنا للتسجيل</a>
+    </div>
+
+    <!-- Demo credentials hint -->
+    <div class="login-demo">
+      🔑 <strong>بيانات تجريبية:</strong><br>
+      اسم المستخدم: <strong>homecenter</strong><br>
+      كلمة المرور: <strong>1234</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 3 — STORE DASHBOARD
+══════════════════════════════════ -->
+<div class="page" id="page-dashboard">
+
+  <!-- Dashboard topbar -->
+  <div class="dash-topbar">
+    <div class="dash-store-info">
+      <div class="dash-store-avatar">🛋️</div>
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="dash-store-name">هوم سنتر الرياض</span>
+          <span class="dash-store-plan">⭐ مميز</span>
+        </div>
+        <div style="font-size:12px;color:var(--dim);margin-top:2px;">homecenter_riyadh · الباقة المميزة</div>
+      </div>
+    </div>
+    <div class="dash-stats">
+      <div class="ds-stat"><span class="ds-stat-num">٧</span><span class="ds-stat-lbl">مناسبات</span></div>
+      <div class="ds-stat"><span class="ds-stat-num">٤٢</span><span class="ds-stat-lbl">عرض نشط</span></div>
+      <div class="ds-stat"><span class="ds-stat-num">١٢٠٠</span><span class="ds-stat-lbl">مشاهدة اليوم</span></div>
+    </div>
+    <button class="dash-logout" onclick="doLogout()">تسجيل الخروج</button>
+  </div>
+
+  <!-- Dashboard body -->
+  <div class="dash-body">
+
+    <!-- Occasions list -->
+    <div>
+      <div class="dash-sec-title">إدارة العروض حسب المناسبة</div>
+      <div class="dash-occasions" id="occasions-list">
+
+        <!-- عيد الفطر — open with deals -->
+        <div class="docc-card active-occ open" id="occ-eid">
+          <div class="docc-head">
+            <span class="docc-emoji">🎊</span>
+            <div class="docc-info">
+              <div class="docc-name">عيد الفطر ١٤٤٧</div>
+              <div class="docc-date">نشط الآن · ٣ أيام متبقية</div>
+            </div>
+            <span class="docc-status" style="background:var(--goldP);color:var(--goldL);border:1px solid rgba(201,150,58,.25);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;">نشط</span>
+            <div class="docc-actions">
+              <button class="btn-add-deal" onclick="openModal('عيد الفطر ١٤٤٧')">+ إضافة عرض</button>
+              <button class="btn-view-deals" onclick="toggleOcc('occ-eid')">▲ إخفاء</button>
+            </div>
+          </div>
+          <div class="docc-deals" id="deals-occ-eid">
+            <div class="ddeal-row">
+              <span class="ddeal-emoji">🛋️</span>
+              <div class="ddeal-info">
+                <div class="ddeal-name">طقم كنب ملكي ٧ قطع – جلد إيطالي</div>
+                <div class="ddeal-price">السعر الجديد: <strong>٥٬٩٩٠ ر.س</strong> · الأصلي: ٩٬٩٩٩ ر.س</div>
+              </div>
+              <span class="ddeal-disc">-٤٠٪</span>
+              <div class="ddeal-actions">
+                <button class="icon-btn" onclick="showToast('✏️ فتح التعديل...')">✏️</button>
+                <button class="icon-btn del" onclick="showToast('🗑️ تم حذف العرض!')">🗑️</button>
+              </div>
+            </div>
+            <div class="ddeal-row">
+              <span class="ddeal-emoji">🪑</span>
+              <div class="ddeal-info">
+                <div class="ddeal-name">كرسي استرخاء فاخر</div>
+                <div class="ddeal-price">السعر الجديد: <strong>٨٩٠ ر.س</strong> · الأصلي: ١٬٢٠٠ ر.س</div>
+              </div>
+              <span class="ddeal-disc">-٢٥٪</span>
+              <div class="ddeal-actions">
+                <button class="icon-btn" onclick="showToast('✏️ فتح التعديل...')">✏️</button>
+                <button class="icon-btn del" onclick="showToast('🗑️ تم حذف العرض!')">🗑️</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- يوم التأسيس -->
+        <div class="docc-card" id="occ-taasis">
+          <div class="docc-head">
+            <span class="docc-emoji">🏛️</span>
+            <div class="docc-info">
+              <div class="docc-name">يوم التأسيس</div>
+              <div class="docc-date">٢٢ فبراير ٢٠٢٦ · يبدأ بعد ٣٢ يوم</div>
+            </div>
+            <span class="docc-status" style="background:rgba(90,126,201,.1);color:var(--blueL);border:1px solid rgba(90,126,201,.2);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;">قادم</span>
+            <div class="docc-actions">
+              <button class="btn-add-deal" onclick="openModal('يوم التأسيس')">+ إضافة عرض</button>
+              <button class="btn-view-deals" onclick="toggleOcc('occ-taasis')">▼ عرض</button>
+            </div>
+          </div>
+          <div class="docc-deals" id="deals-occ-taasis">
+            <div class="docc-empty">لا توجد عروض بعد · ابدأ بإضافة عروض يوم التأسيس</div>
+          </div>
+        </div>
+
+        <!-- رمضان -->
+        <div class="docc-card" id="occ-ramadan">
+          <div class="docc-head">
+            <span class="docc-emoji">🌙</span>
+            <div class="docc-info">
+              <div class="docc-name">رمضان ١٤٤٧</div>
+              <div class="docc-date">مارس ٢٠٢٦</div>
+            </div>
+            <span class="docc-status" style="background:rgba(90,126,201,.1);color:var(--blueL);border:1px solid rgba(90,126,201,.2);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;">قادم</span>
+            <div class="docc-actions">
+              <button class="btn-add-deal" onclick="openModal('رمضان ١٤٤٧')">+ إضافة عرض</button>
+              <button class="btn-view-deals" onclick="toggleOcc('occ-ramadan')">▼ عرض</button>
+            </div>
+          </div>
+          <div class="docc-deals" id="deals-occ-ramadan">
+            <div class="docc-empty">لا توجد عروض بعد</div>
+          </div>
+        </div>
+
+        <!-- اليوم الوطني -->
+        <div class="docc-card" id="occ-national">
+          <div class="docc-head">
+            <span class="docc-emoji">🇸🇦</span>
+            <div class="docc-info">
+              <div class="docc-name">اليوم الوطني ٩٦</div>
+              <div class="docc-date">٢٣ سبتمبر ٢٠٢٦</div>
+            </div>
+            <span class="docc-status" style="background:rgba(90,126,201,.1);color:var(--blueL);border:1px solid rgba(90,126,201,.2);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;">قادم</span>
+            <div class="docc-actions">
+              <button class="btn-add-deal" onclick="openModal('اليوم الوطني ٩٦')">+ إضافة عرض</button>
+              <button class="btn-view-deals" onclick="toggleOcc('occ-national')">▼ عرض</button>
+            </div>
+          </div>
+          <div class="docc-deals" id="deals-occ-national">
+            <div class="docc-empty">لا توجد عروض بعد</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Side panel -->
+    <div class="dash-side">
+
+      <!-- Upcoming -->
+      <div class="side-card">
+        <div class="side-card-title">المناسبات القادمة</div>
+        <div class="upc-list">
+          <div class="upc-item">
+            <span class="upc-emoji">🏛️</span>
+            <div class="upc-info"><div class="upc-name">يوم التأسيس</div><div class="upc-date">٢٢ فبراير</div></div>
+            <span class="upc-days">٣٢ يوم</span>
+          </div>
+          <div class="upc-item">
+            <span class="upc-emoji">🌙</span>
+            <div class="upc-info"><div class="upc-name">رمضان</div><div class="upc-date">مارس ٢٠٢٦</div></div>
+            <span class="upc-days">~٥٠ يوم</span>
+          </div>
+          <div class="upc-item">
+            <span class="upc-emoji">🎊</span>
+            <div class="upc-info"><div class="upc-name">عيد الفطر</div><div class="upc-date">أبريل ٢٠٢٦</div></div>
+            <span class="upc-days">~٨٠ يوم</span>
+          </div>
+          <div class="upc-item">
+            <span class="upc-emoji">🇸🇦</span>
+            <div class="upc-info"><div class="upc-name">اليوم الوطني</div><div class="upc-date">سبتمبر ٢٠٢٦</div></div>
+            <span class="upc-days">~٢٣٠ يوم</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance -->
+      <div class="side-card">
+        <div class="side-card-title">الأداء (آخر ٦ مناسبات)</div>
+        <div class="perf-bars" id="perf-bars"></div>
+        <div style="font-size:12px;color:var(--dim);">متوسط المشاهدات: <strong style="color:var(--goldL)">٩٨٠</strong> / مناسبة</div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="side-card">
+        <div class="side-card-title">الإشعارات</div>
+        <div class="notif-item">
+          <div class="notif-dot"></div>
+          <div><div class="notif-text">تم مشاهدة عرض "طقم كنب" ٢٤٠ مرة اليوم</div><div class="notif-time">منذ ٣ ساعات</div></div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-dot" style="background:var(--blueL)"></div>
+          <div><div class="notif-text">يوم التأسيس بعد ٣٢ يوم — ابدأ بإعداد عروضك</div><div class="notif-time">تذكير تلقائي</div></div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-dot" style="background:var(--greenL)"></div>
+          <div><div class="notif-text">تجديد الاشتراك المميز تم بنجاح</div><div class="notif-time">أمس</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     ADD DEAL MODAL
+══════════════════════════════════ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">إضافة عرض جديد</div>
+    <p class="modal-sub" id="modal-occ-name">المناسبة: عيد الفطر ١٤٤٧</p>
+
+    <div class="form-group">
+      <label class="form-label">اسم المنتج / العرض</label>
+      <input class="form-input" type="text" placeholder="مثال: طقم كنب ٥ قطع جلد طبيعي" id="deal-name">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">السعر الأصلي (ر.س)</label>
+        <input class="form-input" type="number" placeholder="٩٩٩٩" id="deal-price-old">
+      </div>
+      <div class="form-group">
+        <label class="form-label">سعر العرض (ر.س)</label>
+        <input class="form-input" type="number" placeholder="٥٩٩٩" id="deal-price-new">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">الفئة</label>
+        <select class="form-select" id="deal-cat">
+          <option>غرف الجلوس</option>
+          <option>غرف النوم</option>
+          <option>طاولات وكراسي</option>
+          <option>ديكور</option>
+          <option>مكاتب</option>
+          <option>أثاث أطفال</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">تاريخ انتهاء العرض</label>
+        <input class="form-input" type="date" id="deal-end">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">وصف مختصر (اختياري)</label>
+      <input class="form-input" type="text" placeholder="مثال: متوفر بألوان متعددة، التوصيل مجاني" id="deal-desc">
+    </div>
+
+    <div class="modal-actions">
+      <button class="modal-submit" onclick="submitDeal()">نشر العرض ✓</button>
+      <button class="modal-cancel" onclick="closeModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toastEl"></div>
+
+<script>
+/* ─── Cursor ─── */
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.transform=`translate(${mx-4}px,${my-4}px)`;
+});
+(function loop(){
+  rx+=(mx-rx-15)*.1;ry+=(my-ry-15)*.1;
+  curR.style.transform=`translate(${rx}px,${ry}px)`;
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('button,a,[onclick],.deal-card,.ts-item,.docc-card,.occ-tab').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{curR.style.width='44px';curR.style.height='44px';});
+  el.addEventListener('mouseleave',()=>{curR.style.width='30px';curR.style.height='30px';});
+});
+
+/* ─── Page routing ─── */
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  window.scrollTo(0,0);
+
+  // Header store btn label
+  const btn=document.getElementById('store-login-btn');
+  if(name==='dashboard'){
+    btn.innerHTML='<span>🛋️</span> هوم سنتر';
+    btn.onclick=()=>showToast('أنت مسجّل الدخول بالفعل!');
+  } else {
+    btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;opacity:.6"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg> دخول المحلات`;
+    btn.onclick=()=>showPage('login');
+  }
+}
+
+/* ─── Login ─── */
+function doLogin(){
+  const u=document.getElementById('login-user').value.trim();
+  const p=document.getElementById('login-pass').value.trim();
+  if(!u||!p){showToast('⚠️ أدخل اسم المستخدم وكلمة المرور');return;}
+  if(u==='homecenter'&&p==='1234'){
+    showToast('✅ مرحباً! جاري تسجيل الدخول...');
+    setTimeout(()=>showPage('dashboard'),800);
+  } else {
+    showToast('❌ بيانات غير صحيحة — جرب: homecenter / 1234');
+  }
+}
+document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+
+function togglePass(){
+  const inp=document.getElementById('login-pass');
+  const btn=document.getElementById('eye-btn');
+  if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
+  else{inp.type='password';btn.textContent='👁️';}
+}
+
+function doLogout(){
+  showToast('👋 تم تسجيل الخروج');
+  setTimeout(()=>showPage('home'),600);
+}
+
+/* ─── Dashboard ─── */
+function toggleOcc(id){
+  const card=document.getElementById(id);
+  card.classList.toggle('open');
+  const btn=card.querySelector('.btn-view-deals');
+  btn.textContent=card.classList.contains('open')?'▲ إخفاء':'▼ عرض';
+}
+
+/* ─── Modal ─── */
+let currentOcc='';
+function openModal(occ){
+  currentOcc=occ;
+  document.getElementById('modal-occ-name').textContent='المناسبة: '+occ;
+  document.getElementById('deal-name').value='';
+  document.getElementById('deal-price-old').value='';
+  document.getElementById('deal-price-new').value='';
+  document.getElementById('deal-desc').value='';
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+
+function submitDeal(){
+  const name=document.getElementById('deal-name').value.trim();
+  const pOld=document.getElementById('deal-price-old').value;
+  const pNew=document.getElementById('deal-price-new').value;
+  if(!name||!pOld||!pNew){showToast('⚠️ أدخل اسم المنتج والسعرين');return;}
+
+  const disc=Math.round((1-(pNew/pOld))*100);
+  const occId='occ-'+currentOcc.replace(/\s+/g,'-').replace(/[٠-٩]/g,d=>'0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]);
+
+  // Find the deals container for this occasion
+  const containers={
+    'عيد الفطر ١٤٤٧':'deals-occ-eid',
+    'يوم التأسيس':'deals-occ-taasis',
+    'رمضان ١٤٤٧':'deals-occ-ramadan',
+    'اليوم الوطني ٩٦':'deals-occ-national',
+  };
+  const containerId=containers[currentOcc];
+  if(containerId){
+    const container=document.getElementById(containerId);
+    // Remove empty message
+    const empty=container.querySelector('.docc-empty');
+    if(empty)empty.remove();
+    // Add deal row
+    container.insertAdjacentHTML('beforeend',`
+      <div class="ddeal-row">
+        <span class="ddeal-emoji">🛋️</span>
+        <div class="ddeal-info">
+          <div class="ddeal-name">${name}</div>
+          <div class="ddeal-price">السعر الجديد: <strong>${Number(pNew).toLocaleString('ar-SA')} ر.س</strong> · الأصلي: ${Number(pOld).toLocaleString('ar-SA')} ر.س</div>
+        </div>
+        <span class="ddeal-disc">-${disc}٪</span>
+        <div class="ddeal-actions">
+          <button class="icon-btn" onclick="showToast('✏️ فتح التعديل...')">✏️</button>
+          <button class="icon-btn del" onclick="this.closest('.ddeal-row').remove();showToast('🗑️ تم حذف العرض!')">🗑️</button>
+        </div>
+      </div>
+    `);
+    // Open the card
+    const occCard=containerId.replace('deals-occ-','occ-');
+    const card=document.getElementById('occ-'+occCard.split('occ-')[1]);
+    if(card)card.classList.add('open');
+  }
+
+  closeModal();
+  showToast('✅ تم نشر العرض بنجاح!');
+}
+
+/* ─── Performance bars ─── */
+const perfs=[
+  {lbl:'رمضان',h:65},{lbl:'عيد فطر',h:90},{lbl:'وطني',h:80},
+  {lbl:'أضحى',h:70},{lbl:'تأسيس',h:45},{lbl:'مدارس',h:55}
+];
+const barsEl=document.getElementById('perf-bars');
+perfs.forEach(p=>{
+  barsEl.innerHTML+=`<div class="perf-bar-wrap">
+    <div class="perf-bar${p.h>=80?' hi':''}" style="height:${p.h}%"></div>
+    <span class="perf-lbl">${p.lbl}</span>
+  </div>`;
+});
+
+/* ─── Toast ─── */
+function showToast(msg){
+  const t=document.getElementById('toastEl');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+// expose globally
+window.showToast=showToast;
+</script>
+</body>
+</html>
