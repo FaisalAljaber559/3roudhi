@@ -484,6 +484,66 @@ option{background:var(--bg3);}
 @keyframes spin{to{transform:rotate(360deg);}}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* ═══ PRODUCT DETAIL MODAL ═══ */
+.detail-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto;}
+.detail-overlay.open{display:flex;}
+.detail-modal{background:var(--bg2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:680px;position:relative;animation:modalIn .35s cubic-bezier(.34,1.56,.64,1);overflow:hidden;}
+.detail-gallery{width:100%;height:300px;background:var(--bg3);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.detail-gallery-imgs{display:flex;width:100%;height:100%;transition:transform .4s ease;}
+.detail-gallery-img{min-width:100%;height:100%;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:80px;background:var(--bg3);flex-shrink:0;}
+.detail-gallery-img img{width:100%;height:100%;object-fit:cover;}
+.gallery-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(13,13,13,.7);border:1px solid var(--border);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:none;transition:all .2s;z-index:2;}
+.gallery-nav:hover{background:var(--goldP);border-color:var(--gold);}
+.gallery-prev{right:12px;}
+.gallery-next{left:12px;}
+.gallery-dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;}
+.gallery-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3);transition:all .2s;}
+.gallery-dot.active{background:var(--gold);width:18px;border-radius:3px;}
+.detail-disc-badge{position:absolute;top:16px;right:16px;background:var(--red);color:#fff;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:800;z-index:2;}
+.detail-body{padding:24px 28px;}
+.detail-store-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.detail-store-avatar{width:36px;height:36px;border-radius:8px;background:var(--goldP);border:1px solid rgba(201,150,58,.3);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.detail-store-name{font-size:13px;font-weight:700;color:var(--goldL);}
+.detail-title{font-family:'Tajawal',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;line-height:1.3;}
+.detail-desc{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:20px;}
+.detail-price-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 20px;background:var(--bg3);border-radius:12px;margin-bottom:20px;}
+.detail-price-new{font-family:'Tajawal',sans-serif;font-size:30px;font-weight:900;color:var(--goldL);}
+.detail-price-old{font-size:14px;color:var(--dim);text-decoration:line-through;}
+.detail-price-save{padding:4px 12px;border-radius:6px;background:rgba(201,58,58,.12);color:var(--redL);font-size:12px;font-weight:700;margin-right:auto;}
+.detail-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+.detail-btn{flex:1;min-width:130px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:none;transition:all .25s;text-decoration:none;}
+.detail-btn-wa{background:#25D366;color:#fff;}
+.detail-btn-wa:hover{background:#1fb956;transform:translateY(-2px);}
+.detail-btn-phone{background:var(--bg3);border:1px solid var(--border);color:var(--text);}
+.detail-btn-phone:hover{border-color:var(--gold);color:var(--goldL);}
+.detail-btn-site{background:var(--bg3);border:1px solid var(--border);color:var(--text);}
+.detail-btn-site:hover{border-color:var(--blue);color:var(--blueL);}
+.detail-maps{border-top:1px solid var(--border);padding-top:18px;}
+.detail-maps-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}
+.detail-maps-link{display:flex;align-items:center;gap:12px;background:var(--bg3);border:1px solid var(--border);padding:14px 16px;border-radius:10px;transition:all .25s;cursor:none;text-decoration:none;color:var(--text);}
+.detail-maps-link:hover{border-color:rgba(90,126,201,.4);background:rgba(90,126,201,.06);}
+.maps-pin{font-size:20px;}
+.maps-info{flex:1;}
+.maps-name{font-size:14px;font-weight:600;}
+.maps-addr{font-size:12px;color:var(--dim);margin-top:2px;}
+.detail-close{position:absolute;top:14px;left:14px;z-index:10;background:rgba(13,13,13,.8);border:1px solid var(--border);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:none;color:var(--muted);transition:all .2s;backdrop-filter:blur(8px);}
+.detail-close:hover{background:var(--bg4);color:var(--text);}
+.detail-reviews{border-top:1px solid var(--border);padding-top:18px;margin-top:4px;}
+.detail-reviews-title{font-family:'Tajawal',sans-serif;font-size:16px;font-weight:700;margin-bottom:12px;}
+.stars-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
+.star{font-size:18px;color:var(--dim);}
+.star.on{color:var(--gold);}
+.review-avg{font-family:'Tajawal',sans-serif;font-size:26px;font-weight:800;color:var(--goldL);}
+.review-count{font-size:12px;color:var(--dim);}
+/* img url fields in dashboard */
+.img-url-list{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+.img-url-row{display:flex;gap:8px;align-items:center;}
+.btn-rm-img{background:none;border:1px solid var(--border);width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:none;color:var(--dim);transition:all .2s;flex-shrink:0;}
+.btn-rm-img:hover{border-color:var(--red);color:var(--redL);}
+.btn-add-img{background:none;border:1px dashed var(--border);padding:9px;border-radius:8px;font-size:12px;color:var(--dim);cursor:none;transition:all .2s;width:100%;margin-top:4px;}
+.btn-add-img:hover{border-color:var(--gold);color:var(--goldL);}
+
 @media(max-width:900px){
   .header,.hero,.deals-section,.timeline-strip,.dash-body,.dash-topbar,.footer{padding-right:20px;padding-left:20px;}
   .deals-grid{grid-template-columns:1fr 1fr;}
@@ -892,10 +952,13 @@ window.addEventListener('DOMContentLoaded', async () => {
 // ═══════════════════════════════════════
 // LOAD PUBLIC DEALS (الصفحة الرئيسية)
 // ═══════════════════════════════════════
+// تخزين بيانات المنتجات للـ modal
+const publicProductsCache = {};
+
 async function loadPublicDeals() {
   const { data: products } = await sb
     .from('products')
-    .select('*, stores(name_ar)')
+    .select('*, stores(*)')
     .eq('is_available', true)
     .order('created_at', { ascending: false })
     .limit(6);
@@ -912,11 +975,18 @@ async function loadPublicDeals() {
     const storeName = p.stores?.name_ar || 'متجر';
     const emoji = emojis[p.category] || '🛋️';
     const isBig = i === 0;
+    // تخزين في الكاش للاستخدام في الـ modal
+    publicProductsCache[p.id] = { product: p, store: p.stores };
+
+    // صورة مصغرة للبطاقة
+    const thumbContent = p.images && p.images.length > 0
+      ? `<img src="${p.images[0]}" alt="${p.name_ar}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">`
+      : emoji;
 
     grid.insertAdjacentHTML('beforeend', `
-      <div class="deal-card${isBig ? ' big' : ''}">
+      <div class="deal-card${isBig ? ' big' : ''}" onclick="openProductDetail(publicProductsCache['${p.id}'].product, publicProductsCache['${p.id}'].store)" style="cursor:none;">
         <div class="dc-thumb" style="background:linear-gradient(135deg,#1e1a14,#2a2318);">
-          ${emoji}
+          ${thumbContent}
           <div class="dc-disc">-${disc}٪</div>
           <div class="dc-store-tag">🛋️ ${storeName}</div>
         </div>
@@ -930,8 +1000,8 @@ async function loadPublicDeals() {
           </div>
         </div>
         <div class="dc-footer">
-          <span class="dc-exp">عرض <strong>حصري</strong></span>
-          <button class="dc-save-btn" onclick="showToast('✅ تم حفظ العرض!')">حفظ العرض</button>
+          <span class="dc-exp">اضغط لعرض التفاصيل <strong>←</strong></span>
+          <button class="dc-save-btn" onclick="event.stopPropagation();showToast('✅ تم حفظ العرض!')">حفظ</button>
         </div>
       </div>
     `);
@@ -1180,6 +1250,113 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'), 2800);
 }
 window.showToast = showToast;
+
+// ═══════════════════════════════════════
+// PRODUCT DETAIL MODAL
+// ═══════════════════════════════════════
+let galleryIndex = 0;
+let galleryImages = [];
+
+function openProductDetail(product, store) {
+  galleryIndex = 0;
+  galleryImages = product.images && product.images.length > 0 ? product.images : [];
+
+  const disc = Math.round((1 - product.discounted_price / product.original_price) * 100);
+  const saved = (product.original_price - product.discounted_price).toLocaleString('ar-SA');
+  const emojis = { living_room:'🛋️', bedroom:'🛏️', office:'🪑', decor:'🪴', mixed:'🛋️' };
+  const emoji = emojis[product.category] || '🛋️';
+
+  let galleryHTML = '';
+  if (galleryImages.length > 0) {
+    galleryImages.forEach(url => {
+      galleryHTML += `<div class="detail-gallery-img"><img src="${url}" alt="${product.name_ar}" onerror="this.parentElement.innerHTML='${emoji}'"/></div>`;
+    });
+  } else {
+    galleryHTML = `<div class="detail-gallery-img">${emoji}</div>`;
+  }
+
+  const showNav = galleryImages.length > 1;
+  const dotsHTML = galleryImages.length > 1
+    ? galleryImages.map((_, i) => `<div class="gallery-dot${i===0?' active':''}"></div>`).join('')
+    : '';
+
+  const storeName = store?.name_ar || 'المتجر';
+  const storePhone = store?.phone || '';
+  const storeWA = store?.whatsapp || '';
+  const storeSite = store?.website_url || '';
+  const storeMaps = store?.google_maps_url || '';
+  const storeAddr = store?.address || 'الرياض، المملكة العربية السعودية';
+
+  let actionsHTML = '';
+  if (storeWA) actionsHTML += `<a class="detail-btn detail-btn-wa" href="https://wa.me/${storeWA.replace(/\D/g,'')}" target="_blank">💬 واتساب</a>`;
+  if (storePhone) actionsHTML += `<a class="detail-btn detail-btn-phone" href="tel:${storePhone}">📞 اتصال</a>`;
+  if (storeSite) actionsHTML += `<a class="detail-btn detail-btn-site" href="${storeSite}" target="_blank">🌐 الموقع</a>`;
+  if (!actionsHTML) actionsHTML = `<button class="detail-btn detail-btn-phone" onclick="showToast('📞 تواصل مع المتجر مباشرة')">📞 تواصل مع المتجر</button>`;
+
+  const mapsHTML = storeMaps
+    ? `<div class="detail-maps"><div class="detail-maps-title">📍 موقع المتجر</div><a class="detail-maps-link" href="${storeMaps}" target="_blank"><span class="maps-pin">📍</span><div class="maps-info"><div class="maps-name">${storeName}</div><div class="maps-addr">${storeAddr}</div></div><span style="color:var(--dim)">←</span></a></div>`
+    : `<div class="detail-maps"><div class="detail-maps-title">📍 موقع المتجر</div><div class="detail-maps-link" style="opacity:.5;"><span class="maps-pin">📍</span><div class="maps-info"><div class="maps-name">${storeName}</div><div class="maps-addr">${storeAddr}</div></div></div></div>`;
+
+  document.getElementById('detail-modal-inner').innerHTML = `
+    <button class="detail-close" onclick="closeProductDetail()">✕</button>
+    <div class="detail-gallery">
+      <div class="detail-gallery-imgs" id="gallery-imgs">${galleryHTML}</div>
+      ${showNav ? '<button class="gallery-nav gallery-prev" onclick="galleryMove(-1)">›</button><button class="gallery-nav gallery-next" onclick="galleryMove(1)">‹</button>' : ''}
+      <div class="gallery-dots" id="gallery-dots">${dotsHTML}</div>
+      <div class="detail-disc-badge">-${disc}٪</div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-store-row">
+        <div class="detail-store-avatar">🛋️</div>
+        <div><div class="detail-store-name">${storeName}</div><div style="font-size:11px;color:var(--dim);">✅ متجر موثّق</div></div>
+      </div>
+      <div class="detail-title">${product.name_ar}</div>
+      ${product.description ? `<div class="detail-desc">${product.description}</div>` : ''}
+      <div class="detail-price-row">
+        <span class="detail-price-new">${product.discounted_price.toLocaleString('ar-SA')} ر.س</span>
+        <span class="detail-price-old">${product.original_price.toLocaleString('ar-SA')} ر.س</span>
+        <span class="detail-price-save">وفّر ${saved} ر.س</span>
+      </div>
+      <div class="detail-actions">${actionsHTML}</div>
+      ${mapsHTML}
+      <div class="detail-reviews">
+        <div class="detail-reviews-title">تقييمات العملاء</div>
+        <div class="stars-row">
+          <span class="star on">★</span><span class="star on">★</span><span class="star on">★</span><span class="star on">★</span><span class="star">★</span>
+          <span class="review-avg">4.0</span>
+          <span class="review-count">(قريباً)</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('detail-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProductDetail() {
+  document.getElementById('detail-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function galleryMove(dir) {
+  if (galleryImages.length <= 1) return;
+  galleryIndex = (galleryIndex + dir + galleryImages.length) % galleryImages.length;
+  document.getElementById('gallery-imgs').style.transform = `translateX(${galleryIndex * 100}%)`;
+  document.querySelectorAll('.gallery-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === galleryIndex);
+  });
+}
+
+document.getElementById('detail-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeProductDetail();
+});
 </script>
+
+<!-- PRODUCT DETAIL MODAL -->
+<div class="detail-overlay" id="detail-overlay">
+  <div class="detail-modal" id="detail-modal-inner"></div>
+</div>
+
 </body>
 </html>
