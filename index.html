@@ -876,7 +876,6 @@ let sb;
 
 // سيتم تهيئة Supabase بعد تحميل الصفحة
 window.addEventListener('DOMContentLoaded', async () => {
-  // نقرأ المفتاح من meta tag أو من الكود مباشرة
   sb = createClient(SUPABASE_URL, 'sb_publishable_O8PBOziG71unQ917IG30sw_7iQHwugv');
   
   // تحقق من الجلسة الحالية
@@ -885,7 +884,59 @@ window.addEventListener('DOMContentLoaded', async () => {
     await loadDashboard(session.user);
     showPage('dashboard');
   }
+
+  // جلب العروض الحقيقية للصفحة الرئيسية
+  await loadPublicDeals();
 });
+
+// ═══════════════════════════════════════
+// LOAD PUBLIC DEALS (الصفحة الرئيسية)
+// ═══════════════════════════════════════
+async function loadPublicDeals() {
+  const { data: products } = await sb
+    .from('products')
+    .select('*, stores(name_ar)')
+    .eq('is_available', true)
+    .order('created_at', { ascending: false })
+    .limit(6);
+
+  if (!products || products.length === 0) return;
+
+  const grid = document.getElementById('public-deals-grid');
+  grid.innerHTML = '';
+
+  const emojis = { living_room:'🛋️', bedroom:'🛏️', office:'🪑', decor:'🪴', mixed:'🛋️' };
+
+  products.forEach((p, i) => {
+    const disc = Math.round((1 - p.discounted_price / p.original_price) * 100);
+    const storeName = p.stores?.name_ar || 'متجر';
+    const emoji = emojis[p.category] || '🛋️';
+    const isBig = i === 0;
+
+    grid.insertAdjacentHTML('beforeend', `
+      <div class="deal-card${isBig ? ' big' : ''}">
+        <div class="dc-thumb" style="background:linear-gradient(135deg,#1e1a14,#2a2318);">
+          ${emoji}
+          <div class="dc-disc">-${disc}٪</div>
+          <div class="dc-store-tag">🛋️ ${storeName}</div>
+        </div>
+        <div class="dc-body">
+          <div class="dc-store">${storeName}</div>
+          <div class="dc-name">${p.name_ar}</div>
+          <div class="dc-price">
+            <span class="dc-now">${p.discounted_price.toLocaleString('ar-SA')} ر.س</span>
+            <span class="dc-was">${p.original_price.toLocaleString('ar-SA')} ر.س</span>
+            <span class="dc-save">وفّر ${(p.original_price - p.discounted_price).toLocaleString('ar-SA')}</span>
+          </div>
+        </div>
+        <div class="dc-footer">
+          <span class="dc-exp">عرض <strong>حصري</strong></span>
+          <button class="dc-save-btn" onclick="showToast('✅ تم حفظ العرض!')">حفظ العرض</button>
+        </div>
+      </div>
+    `);
+  });
+}
 
 // ═══════════════════════════════════════
 // CURSOR
