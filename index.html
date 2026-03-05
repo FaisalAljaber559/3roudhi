@@ -6,6 +6,7 @@
 <title>عُروضي – عروض الأثاث في مناسباتك</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 /* ═══════════════════════════════════════
    ROOT & RESET
@@ -66,7 +67,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opa
 .header-nav a{font-size:14px;color:var(--muted);transition:color .2s;}
 .header-nav a:hover{color:var(--text);}
 
-/* Store login icon button */
 .store-btn{
   display:flex;align-items:center;gap:8px;
   background:var(--bg3);border:1px solid var(--border);
@@ -82,7 +82,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opa
 ═══════════════════════════════════════ */
 #page-home{padding-top:64px;}
 
-/* Hero */
 .hero{
   min-height:88vh;display:flex;flex-direction:column;
   justify-content:center;align-items:center;text-align:center;
@@ -104,7 +103,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opa
 .hero h1 span{color:var(--gold);display:block;}
 .hero-sub{margin-top:18px;max-width:500px;font-size:17px;line-height:1.9;color:var(--muted);animation:fadeUp 1s .2s ease both;}
 
-/* Occasion tabs */
 .occ-tabs{
   display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
   margin-top:44px;animation:fadeUp 1s .3s ease both;
@@ -121,7 +119,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opa
 .occ-tab.now .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
 .occ-tab.soon{border-color:rgba(90,126,201,.3);color:var(--blueL);}
 
-/* Deals Grid */
 .deals-section{padding:60px 48px 80px;}
 .ds-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:36px;}
 .ds-title{font-family:'Tajawal',sans-serif;font-size:clamp(24px,3vw,36px);font-weight:800;}
@@ -179,7 +176,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opa
 }
 .dc-save-btn:hover{border-color:var(--gold);color:var(--gold);}
 
-/* Occasion timeline strip */
 .timeline-strip{padding:0 48px 80px;}
 .ts-title{font-family:'Tajawal',sans-serif;font-size:28px;font-weight:800;margin-bottom:28px;}
 .ts-title small{display:block;font-size:14px;font-weight:400;color:var(--muted);font-family:'Cairo',sans-serif;margin-bottom:4px;}
@@ -208,9 +204,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opa
 .ts-name{font-size:16px;font-weight:700;color:var(--text);}
 .ts-date{font-size:12px;color:var(--dim);margin-top:2px;}
 .ts-meta{display:flex;gap:10px;align-items:center;}
-.ts-badge{
-  padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;
-}
+.ts-badge{padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;}
 .badge-now{background:var(--goldP);color:var(--goldL);border:1px solid rgba(201,150,58,.25);}
 .badge-soon{background:rgba(90,126,201,.1);color:var(--blueL);border:1px solid rgba(90,126,201,.2);}
 .badge-past{background:var(--bg3);color:var(--dim);border:1px solid var(--border);}
@@ -260,11 +254,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opa
 }
 .form-input::placeholder{color:var(--dim);}
 .form-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--goldP);}
-.form-input.has-icon{padding-left:46px;}
 
 .input-wrap{position:relative;}
 .input-icon{
-  position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  position:absolute;right:16px;top:50%;transform:translateY(-50%);
   font-size:17px;opacity:.5;pointer-events:none;
 }
 .eye-btn{
@@ -282,6 +275,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opa
   box-shadow:0 6px 24px var(--goldG);
 }
 .login-btn:hover{background:var(--goldL);transform:translateY(-1px);}
+.login-btn:disabled{opacity:.6;transform:none;}
 
 .login-hint{
   text-align:center;margin-top:20px;
@@ -289,20 +283,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opa
 }
 .login-hint a{color:var(--gold);}
 
-.login-demo{
-  margin-top:24px;padding:14px 16px;
-  background:var(--bg3);border:1px solid var(--border);border-radius:9px;
-  font-size:12px;color:var(--dim);line-height:1.9;
-}
-.login-demo strong{color:var(--muted);}
-
 /* ═══════════════════════════════════════
    PAGE 3 — STORE DASHBOARD
 ═══════════════════════════════════════ */
 #page-dashboard{display:none;padding-top:64px;}
 #page-dashboard.active{display:block;}
 
-/* Dashboard header strip */
 .dash-topbar{
   background:var(--bg2);border-bottom:1px solid var(--border);
   padding:20px 48px;display:flex;align-items:center;gap:20px;
@@ -323,10 +309,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opa
 .dash-logout{background:none;border:1px solid var(--border);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);cursor:none;transition:all .2s;}
 .dash-logout:hover{border-color:var(--red);color:var(--redL);}
 
-/* Dashboard body */
 .dash-body{padding:40px 48px;display:grid;grid-template-columns:1fr 360px;gap:32px;}
 
-/* Occasions list */
 .dash-occasions{display:flex;flex-direction:column;gap:16px;}
 .dash-sec-title{font-family:'Tajawal',sans-serif;font-size:22px;font-weight:800;margin-bottom:24px;}
 
@@ -359,7 +343,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opa
 }
 .btn-view-deals:hover{border-color:var(--borderH);color:var(--text);}
 
-/* Deals inside occasion card */
 .docc-deals{
   border-top:1px solid var(--border);
   padding:16px 22px;display:none;
@@ -389,7 +372,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opa
   font-size:13px;color:var(--dim);
 }
 
-/* ── Add Deal Modal ── */
+/* Modal */
 .modal-overlay{
   position:fixed;inset:0;z-index:500;
   background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
@@ -428,6 +411,7 @@ option{background:var(--bg3);}
   font-size:15px;font-weight:700;cursor:none;transition:all .25s;
 }
 .modal-submit:hover{background:var(--goldL);}
+.modal-submit:disabled{opacity:.6;}
 .modal-cancel{
   background:none;border:1px solid var(--border);
   padding:13px 20px;border-radius:9px;
@@ -435,12 +419,11 @@ option{background:var(--bg3);}
 }
 .modal-cancel:hover{border-color:var(--borderH);color:var(--text);}
 
-/* ── Side panel ── */
+/* Side panel */
 .dash-side{display:flex;flex-direction:column;gap:20px;}
 .side-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:22px;}
 .side-card-title{font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:18px;}
 
-/* Upcoming occasions mini */
 .upc-list{display:flex;flex-direction:column;gap:12px;}
 .upc-item{display:flex;align-items:center;gap:12px;}
 .upc-emoji{font-size:20px;}
@@ -449,7 +432,6 @@ option{background:var(--bg3);}
 .upc-date{font-size:11px;color:var(--dim);}
 .upc-days{font-size:12px;font-weight:700;color:var(--goldL);white-space:nowrap;}
 
-/* Performance mini chart */
 .perf-bars{display:flex;gap:8px;align-items:flex-end;height:80px;margin-bottom:12px;}
 .perf-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
 .perf-bar{width:100%;border-radius:4px 4px 0 0;background:var(--goldP);border:1px solid rgba(201,150,58,.2);transition:height .5s ease;}
@@ -465,9 +447,7 @@ option{background:var(--bg3);}
 .notif-text{font-size:12px;color:var(--muted);line-height:1.6;}
 .notif-time{font-size:10px;color:var(--dim);margin-top:2px;}
 
-/* ═══════════════════════════════════════
-   FOOTER (homepage only)
-═══════════════════════════════════════ */
+/* Footer */
 .footer{
   background:var(--bg2);border-top:1px solid var(--border);
   padding:44px 48px 24px;
@@ -486,7 +466,7 @@ option{background:var(--bg3);}
 .soc{width:32px;height:32px;border-radius:7px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:none;transition:all .2s;}
 .soc:hover{background:var(--goldP);border-color:rgba(201,150,58,.3);}
 
-/* ═══ TOAST ═══ */
+/* Toast */
 .toast{
   position:fixed;bottom:26px;left:50%;
   transform:translateX(-50%) translateY(70px);
@@ -499,7 +479,10 @@ option{background:var(--bg3);}
 }
 .toast.show{transform:translateX(-50%) translateY(0);}
 
-/* ═══ UTILS ═══ */
+/* Loading spinner */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(0,0,0,.3);border-top-color:#0D0D0D;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-left:6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 @media(max-width:900px){
   .header,.hero,.deals-section,.timeline-strip,.dash-body,.dash-topbar,.footer{padding-right:20px;padding-left:20px;}
@@ -517,9 +500,7 @@ option{background:var(--bg3);}
 <div class="cur" id="cur"></div>
 <div class="curR" id="curR"></div>
 
-<!-- ══════════════════════════════════
-     SHARED HEADER
-══════════════════════════════════ -->
+<!-- SHARED HEADER -->
 <header class="header" id="main-header">
   <div class="logo">عُروضي<em>.</em></div>
   <nav class="header-nav">
@@ -527,7 +508,6 @@ option{background:var(--bg3);}
     <a href="#">المناسبات</a>
     <a href="#">المحلات</a>
   </nav>
-  <!-- Store login icon -->
   <button class="store-btn" onclick="showPage('login')" id="store-login-btn">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
@@ -537,12 +517,8 @@ option{background:var(--bg3);}
   </button>
 </header>
 
-<!-- ══════════════════════════════════
-     PAGE 1 — HOMEPAGE (END USER)
-══════════════════════════════════ -->
+<!-- PAGE 1 — HOMEPAGE -->
 <div class="page active" id="page-home">
-
-  <!-- Hero -->
   <section class="hero">
     <div class="hero-glow"></div>
     <div class="hero-badge">
@@ -554,8 +530,6 @@ option{background:var(--bg3);}
       <span>في كل مناسبة 🛋️</span>
     </h1>
     <p class="hero-sub">كل عروض محلات الأثاث في الرياض — مرتّبة حسب المناسبة، محدّثة من المحلات مباشرةً.</p>
-
-    <!-- Occasion quick tabs -->
     <div class="occ-tabs">
       <div class="occ-tab now"><span class="dot"></span>عيد الفطر 🎊</div>
       <div class="occ-tab soon">يوم التأسيس 🏛️</div>
@@ -567,7 +541,6 @@ option{background:var(--bg3);}
     </div>
   </section>
 
-  <!-- Deals Grid -->
   <section class="deals-section">
     <div class="ds-header">
       <div class="ds-title">
@@ -576,19 +549,15 @@ option{background:var(--bg3);}
       </div>
       <a href="#" class="see-all">عرض الكل ←</a>
     </div>
-
-    <div class="deals-grid">
-
-      <!-- Big featured deal -->
+    <div class="deals-grid" id="public-deals-grid">
+      <!-- يتم تحميلها من Supabase -->
       <div class="deal-card big">
         <div class="dc-thumb" style="background:linear-gradient(135deg,#1e1a14,#2a2318);">
-          🛋️
-          <div class="dc-disc">-٤٠٪</div>
-          <div class="dc-store-tag">🛋️ هوم سنتر</div>
+          🛋️<div class="dc-disc">-٤٠٪</div><div class="dc-store-tag">🛋️ هوم سنتر</div>
         </div>
         <div class="dc-body">
           <div class="dc-store">هوم سنتر</div>
-          <div class="dc-name">طقم كنب ملكي ٧ قطع – جلد إيطالي أصلي، متعدد الألوان</div>
+          <div class="dc-name">طقم كنب ملكي ٧ قطع – جلد إيطالي أصلي</div>
           <div class="dc-price">
             <span class="dc-now">٥٬٩٩٠ ر.س</span>
             <span class="dc-was">٩٬٩٩٩ ر.س</span>
@@ -600,7 +569,6 @@ option{background:var(--bg3);}
           <button class="dc-save-btn" onclick="showToast('✅ تم حفظ العرض!')">حفظ العرض</button>
         </div>
       </div>
-
       <div class="deal-card">
         <div class="dc-thumb" style="background:linear-gradient(135deg,#141e14,#1a2a1a);">
           🛏️<div class="dc-disc">-٢٥٪</div><div class="dc-store-tag">🔵 إيكيا</div>
@@ -615,7 +583,6 @@ option{background:var(--bg3);}
           <button class="dc-save-btn" onclick="showToast('✅ تم حفظ العرض!')">حفظ</button>
         </div>
       </div>
-
       <div class="deal-card">
         <div class="dc-thumb" style="background:linear-gradient(135deg,#1e1814,#2a2018);">
           🪑<div class="dc-disc">-٣٠٪</div><div class="dc-store-tag">🟤 ساكو</div>
@@ -630,26 +597,9 @@ option{background:var(--bg3);}
           <button class="dc-save-btn" onclick="showToast('✅ تم حفظ العرض!')">حفظ</button>
         </div>
       </div>
-
-      <div class="deal-card">
-        <div class="dc-thumb" style="background:linear-gradient(135deg,#14181e,#18202a);">
-          🪴<div class="dc-disc">-٤٥٪</div><div class="dc-store-tag">✨ ريدان</div>
-        </div>
-        <div class="dc-body">
-          <div class="dc-store">ريدان</div>
-          <div class="dc-name">مجموعة ديكور منزلية ١٥ قطعة</div>
-          <div class="dc-price"><span class="dc-now">٤٩٠ ر.س</span><span class="dc-was">٨٩٠</span></div>
-        </div>
-        <div class="dc-footer">
-          <span class="dc-exp">آخر <strong>٢٠ قطعة</strong></span>
-          <button class="dc-save-btn" onclick="showToast('✅ تم حفظ العرض!')">حفظ</button>
-        </div>
-      </div>
-
     </div>
   </section>
 
-  <!-- Timeline strip -->
   <section class="timeline-strip">
     <div class="ts-title">
       <small>تقويم المناسبات</small>
@@ -658,56 +608,37 @@ option{background:var(--bg3);}
     <div class="ts-list">
       <div class="ts-item now">
         <span class="ts-emoji">🎊</span>
-        <div class="ts-info">
-          <div class="ts-name">عيد الفطر ١٤٤٧</div>
-          <div class="ts-date">أوائل أبريل ٢٠٢٦</div>
-        </div>
-        <div class="ts-meta">
-          <span class="ts-badge badge-now">نشط الآن</span>
-          <span class="ts-count"><strong>٤١</strong> عرض · <strong>١٨</strong> محل</span>
-        </div>
+        <div class="ts-info"><div class="ts-name">عيد الفطر ١٤٤٧</div><div class="ts-date">أوائل أبريل ٢٠٢٦</div></div>
+        <div class="ts-meta"><span class="ts-badge badge-now">نشط الآن</span><span class="ts-count"><strong>٤١</strong> عرض · <strong>١٨</strong> محل</span></div>
         <span class="ts-arrow">←</span>
       </div>
       <div class="ts-item soon">
         <span class="ts-emoji">🏛️</span>
         <div class="ts-info"><div class="ts-name">يوم التأسيس</div><div class="ts-date">٢٢ فبراير ٢٠٢٦</div></div>
-        <div class="ts-meta"><span class="ts-badge badge-soon">قادم · ٣٢ يوم</span><span class="ts-count"><strong>١٦</strong> محل مسجّل</span></div>
+        <div class="ts-meta"><span class="ts-badge badge-soon">قادم · ٣٢ يوم</span></div>
         <span class="ts-arrow">←</span>
       </div>
       <div class="ts-item soon">
         <span class="ts-emoji">🌙</span>
         <div class="ts-info"><div class="ts-name">رمضان ١٤٤٧</div><div class="ts-date">مارس ٢٠٢٦</div></div>
-        <div class="ts-meta"><span class="ts-badge badge-soon">قادم</span><span class="ts-count"><strong>٣٢</strong> محل مسجّل</span></div>
+        <div class="ts-meta"><span class="ts-badge badge-soon">قادم</span></div>
         <span class="ts-arrow">←</span>
       </div>
       <div class="ts-item">
         <span class="ts-emoji">🐑</span>
         <div class="ts-info"><div class="ts-name">عيد الأضحى</div><div class="ts-date">يونيو ٢٠٢٦</div></div>
-        <div class="ts-meta"><span class="ts-badge badge-soon">قادم</span><span class="ts-count"><strong>٣٨</strong> محل مسجّل</span></div>
-        <span class="ts-arrow">←</span>
-      </div>
-      <div class="ts-item">
-        <span class="ts-emoji">🎒</span>
-        <div class="ts-info"><div class="ts-name">عودة المدارس</div><div class="ts-date">أغسطس ٢٠٢٦</div></div>
-        <div class="ts-meta"><span class="ts-badge badge-soon">قادم</span><span class="ts-count"><strong>٢٤</strong> محل مسجّل</span></div>
+        <div class="ts-meta"><span class="ts-badge badge-soon">قادم</span></div>
         <span class="ts-arrow">←</span>
       </div>
       <div class="ts-item">
         <span class="ts-emoji">🇸🇦</span>
         <div class="ts-info"><div class="ts-name">اليوم الوطني ٩٦</div><div class="ts-date">٢٣ سبتمبر ٢٠٢٦</div></div>
-        <div class="ts-meta"><span class="ts-badge badge-soon">قادم</span><span class="ts-count"><strong>٥٢</strong> محل مسجّل</span></div>
-        <span class="ts-arrow">←</span>
-      </div>
-      <div class="ts-item">
-        <span class="ts-emoji">🌹</span>
-        <div class="ts-info"><div class="ts-name">يوم الأم</div><div class="ts-date">٢١ مارس ٢٠٢٦</div></div>
-        <div class="ts-meta"><span class="ts-badge badge-soon">قادم</span><span class="ts-count"><strong>٩</strong> محل مسجّل</span></div>
+        <div class="ts-meta"><span class="ts-badge badge-soon">قادم</span></div>
         <span class="ts-arrow">←</span>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="footer-row">
       <div class="footer-brand">
@@ -736,9 +667,7 @@ option{background:var(--bg3);}
   </footer>
 </div>
 
-<!-- ══════════════════════════════════
-     PAGE 2 — STORE LOGIN
-══════════════════════════════════ -->
+<!-- PAGE 2 — STORE LOGIN -->
 <div class="page" id="page-login">
   <div class="login-card">
     <div class="login-back" onclick="showPage('home')">← العودة للرئيسية</div>
@@ -747,77 +676,61 @@ option{background:var(--bg3);}
     <p class="login-sub">أدخل بيانات حسابك لإدارة عروضك في المناسبات</p>
 
     <div class="form-group">
-      <label class="form-label">اسم المستخدم</label>
+      <label class="form-label">البريد الإلكتروني</label>
       <div class="input-wrap">
-        <span class="input-icon">👤</span>
-        <input class="form-input" style="padding-right:46px;" type="text" placeholder="مثال: homecenter_riyadh" id="login-user">
+        <span class="input-icon">✉️</span>
+        <input class="form-input" style="padding-right:46px;" type="email" placeholder="homecenter@3roudhi.com" id="login-email">
       </div>
     </div>
 
     <div class="form-group">
       <label class="form-label">كلمة المرور</label>
       <div class="input-wrap">
-        <span class="input-icon" style="right:16px;left:auto;">🔒</span>
+        <span class="input-icon">🔒</span>
         <input class="form-input" style="padding-right:46px;" type="password" placeholder="••••••••" id="login-pass">
         <button class="eye-btn" onclick="togglePass()" id="eye-btn">👁️</button>
       </div>
     </div>
 
-    <button class="login-btn" onclick="doLogin()">تسجيل الدخول</button>
+    <button class="login-btn" onclick="doLogin()" id="login-submit-btn">تسجيل الدخول</button>
 
     <div class="login-hint">
       ليس لديك حساب؟ <a href="#" onclick="showToast('📩 سيتواصل معك فريقنا!')">تواصل معنا للتسجيل</a>
     </div>
-
-    <!-- Demo credentials hint -->
-    <div class="login-demo">
-      🔑 <strong>بيانات تجريبية:</strong><br>
-      اسم المستخدم: <strong>homecenter</strong><br>
-      كلمة المرور: <strong>1234</strong>
-    </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     PAGE 3 — STORE DASHBOARD
-══════════════════════════════════ -->
+<!-- PAGE 3 — STORE DASHBOARD -->
 <div class="page" id="page-dashboard">
-
-  <!-- Dashboard topbar -->
   <div class="dash-topbar">
     <div class="dash-store-info">
       <div class="dash-store-avatar">🛋️</div>
       <div>
         <div style="display:flex;align-items:center;gap:10px;">
-          <span class="dash-store-name">هوم سنتر الرياض</span>
+          <span class="dash-store-name" id="dash-store-name">جاري التحميل...</span>
           <span class="dash-store-plan">⭐ مميز</span>
         </div>
-        <div style="font-size:12px;color:var(--dim);margin-top:2px;">homecenter_riyadh · الباقة المميزة</div>
+        <div style="font-size:12px;color:var(--dim);margin-top:2px;" id="dash-store-email"></div>
       </div>
     </div>
     <div class="dash-stats">
+      <div class="ds-stat"><span class="ds-stat-num" id="stat-products">٠</span><span class="ds-stat-lbl">عرض نشط</span></div>
       <div class="ds-stat"><span class="ds-stat-num">٧</span><span class="ds-stat-lbl">مناسبات</span></div>
-      <div class="ds-stat"><span class="ds-stat-num">٤٢</span><span class="ds-stat-lbl">عرض نشط</span></div>
-      <div class="ds-stat"><span class="ds-stat-num">١٢٠٠</span><span class="ds-stat-lbl">مشاهدة اليوم</span></div>
     </div>
     <button class="dash-logout" onclick="doLogout()">تسجيل الخروج</button>
   </div>
 
-  <!-- Dashboard body -->
   <div class="dash-body">
-
-    <!-- Occasions list -->
     <div>
       <div class="dash-sec-title">إدارة العروض حسب المناسبة</div>
       <div class="dash-occasions" id="occasions-list">
 
-        <!-- عيد الفطر — open with deals -->
         <div class="docc-card active-occ open" id="occ-eid">
           <div class="docc-head">
             <span class="docc-emoji">🎊</span>
             <div class="docc-info">
               <div class="docc-name">عيد الفطر ١٤٤٧</div>
-              <div class="docc-date">نشط الآن · ٣ أيام متبقية</div>
+              <div class="docc-date">نشط الآن</div>
             </div>
             <span class="docc-status" style="background:var(--goldP);color:var(--goldL);border:1px solid rgba(201,150,58,.25);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;">نشط</span>
             <div class="docc-actions">
@@ -826,41 +739,14 @@ option{background:var(--bg3);}
             </div>
           </div>
           <div class="docc-deals" id="deals-occ-eid">
-            <div class="ddeal-row">
-              <span class="ddeal-emoji">🛋️</span>
-              <div class="ddeal-info">
-                <div class="ddeal-name">طقم كنب ملكي ٧ قطع – جلد إيطالي</div>
-                <div class="ddeal-price">السعر الجديد: <strong>٥٬٩٩٠ ر.س</strong> · الأصلي: ٩٬٩٩٩ ر.س</div>
-              </div>
-              <span class="ddeal-disc">-٤٠٪</span>
-              <div class="ddeal-actions">
-                <button class="icon-btn" onclick="showToast('✏️ فتح التعديل...')">✏️</button>
-                <button class="icon-btn del" onclick="showToast('🗑️ تم حذف العرض!')">🗑️</button>
-              </div>
-            </div>
-            <div class="ddeal-row">
-              <span class="ddeal-emoji">🪑</span>
-              <div class="ddeal-info">
-                <div class="ddeal-name">كرسي استرخاء فاخر</div>
-                <div class="ddeal-price">السعر الجديد: <strong>٨٩٠ ر.س</strong> · الأصلي: ١٬٢٠٠ ر.س</div>
-              </div>
-              <span class="ddeal-disc">-٢٥٪</span>
-              <div class="ddeal-actions">
-                <button class="icon-btn" onclick="showToast('✏️ فتح التعديل...')">✏️</button>
-                <button class="icon-btn del" onclick="showToast('🗑️ تم حذف العرض!')">🗑️</button>
-              </div>
-            </div>
+            <div class="docc-empty" id="empty-eid">جاري تحميل العروض...</div>
           </div>
         </div>
 
-        <!-- يوم التأسيس -->
         <div class="docc-card" id="occ-taasis">
           <div class="docc-head">
             <span class="docc-emoji">🏛️</span>
-            <div class="docc-info">
-              <div class="docc-name">يوم التأسيس</div>
-              <div class="docc-date">٢٢ فبراير ٢٠٢٦ · يبدأ بعد ٣٢ يوم</div>
-            </div>
+            <div class="docc-info"><div class="docc-name">يوم التأسيس</div><div class="docc-date">٢٢ فبراير ٢٠٢٦</div></div>
             <span class="docc-status" style="background:rgba(90,126,201,.1);color:var(--blueL);border:1px solid rgba(90,126,201,.2);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;">قادم</span>
             <div class="docc-actions">
               <button class="btn-add-deal" onclick="openModal('يوم التأسيس')">+ إضافة عرض</button>
@@ -868,18 +754,14 @@ option{background:var(--bg3);}
             </div>
           </div>
           <div class="docc-deals" id="deals-occ-taasis">
-            <div class="docc-empty">لا توجد عروض بعد · ابدأ بإضافة عروض يوم التأسيس</div>
+            <div class="docc-empty">لا توجد عروض بعد</div>
           </div>
         </div>
 
-        <!-- رمضان -->
         <div class="docc-card" id="occ-ramadan">
           <div class="docc-head">
             <span class="docc-emoji">🌙</span>
-            <div class="docc-info">
-              <div class="docc-name">رمضان ١٤٤٧</div>
-              <div class="docc-date">مارس ٢٠٢٦</div>
-            </div>
+            <div class="docc-info"><div class="docc-name">رمضان ١٤٤٧</div><div class="docc-date">مارس ٢٠٢٦</div></div>
             <span class="docc-status" style="background:rgba(90,126,201,.1);color:var(--blueL);border:1px solid rgba(90,126,201,.2);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;">قادم</span>
             <div class="docc-actions">
               <button class="btn-add-deal" onclick="openModal('رمضان ١٤٤٧')">+ إضافة عرض</button>
@@ -891,14 +773,10 @@ option{background:var(--bg3);}
           </div>
         </div>
 
-        <!-- اليوم الوطني -->
         <div class="docc-card" id="occ-national">
           <div class="docc-head">
             <span class="docc-emoji">🇸🇦</span>
-            <div class="docc-info">
-              <div class="docc-name">اليوم الوطني ٩٦</div>
-              <div class="docc-date">٢٣ سبتمبر ٢٠٢٦</div>
-            </div>
+            <div class="docc-info"><div class="docc-name">اليوم الوطني ٩٦</div><div class="docc-date">٢٣ سبتمبر ٢٠٢٦</div></div>
             <span class="docc-status" style="background:rgba(90,126,201,.1);color:var(--blueL);border:1px solid rgba(90,126,201,.2);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;">قادم</span>
             <div class="docc-actions">
               <button class="btn-add-deal" onclick="openModal('اليوم الوطني ٩٦')">+ إضافة عرض</button>
@@ -913,67 +791,31 @@ option{background:var(--bg3);}
       </div>
     </div>
 
-    <!-- Side panel -->
     <div class="dash-side">
-
-      <!-- Upcoming -->
       <div class="side-card">
         <div class="side-card-title">المناسبات القادمة</div>
         <div class="upc-list">
-          <div class="upc-item">
-            <span class="upc-emoji">🏛️</span>
-            <div class="upc-info"><div class="upc-name">يوم التأسيس</div><div class="upc-date">٢٢ فبراير</div></div>
-            <span class="upc-days">٣٢ يوم</span>
-          </div>
-          <div class="upc-item">
-            <span class="upc-emoji">🌙</span>
-            <div class="upc-info"><div class="upc-name">رمضان</div><div class="upc-date">مارس ٢٠٢٦</div></div>
-            <span class="upc-days">~٥٠ يوم</span>
-          </div>
-          <div class="upc-item">
-            <span class="upc-emoji">🎊</span>
-            <div class="upc-info"><div class="upc-name">عيد الفطر</div><div class="upc-date">أبريل ٢٠٢٦</div></div>
-            <span class="upc-days">~٨٠ يوم</span>
-          </div>
-          <div class="upc-item">
-            <span class="upc-emoji">🇸🇦</span>
-            <div class="upc-info"><div class="upc-name">اليوم الوطني</div><div class="upc-date">سبتمبر ٢٠٢٦</div></div>
-            <span class="upc-days">~٢٣٠ يوم</span>
-          </div>
+          <div class="upc-item"><span class="upc-emoji">🏛️</span><div class="upc-info"><div class="upc-name">يوم التأسيس</div><div class="upc-date">٢٢ فبراير</div></div><span class="upc-days">٣٢ يوم</span></div>
+          <div class="upc-item"><span class="upc-emoji">🌙</span><div class="upc-info"><div class="upc-name">رمضان</div><div class="upc-date">مارس ٢٠٢٦</div></div><span class="upc-days">~٥٠ يوم</span></div>
+          <div class="upc-item"><span class="upc-emoji">🇸🇦</span><div class="upc-info"><div class="upc-name">اليوم الوطني</div><div class="upc-date">سبتمبر ٢٠٢٦</div></div><span class="upc-days">~٢٣٠ يوم</span></div>
         </div>
       </div>
-
-      <!-- Performance -->
-      <div class="side-card">
-        <div class="side-card-title">الأداء (آخر ٦ مناسبات)</div>
-        <div class="perf-bars" id="perf-bars"></div>
-        <div style="font-size:12px;color:var(--dim);">متوسط المشاهدات: <strong style="color:var(--goldL)">٩٨٠</strong> / مناسبة</div>
-      </div>
-
-      <!-- Notifications -->
       <div class="side-card">
         <div class="side-card-title">الإشعارات</div>
         <div class="notif-item">
           <div class="notif-dot"></div>
-          <div><div class="notif-text">تم مشاهدة عرض "طقم كنب" ٢٤٠ مرة اليوم</div><div class="notif-time">منذ ٣ ساعات</div></div>
+          <div><div class="notif-text">مرحباً بك في لوحة التحكم!</div><div class="notif-time">الآن</div></div>
         </div>
         <div class="notif-item">
           <div class="notif-dot" style="background:var(--blueL)"></div>
-          <div><div class="notif-text">يوم التأسيس بعد ٣٢ يوم — ابدأ بإعداد عروضك</div><div class="notif-time">تذكير تلقائي</div></div>
-        </div>
-        <div class="notif-item">
-          <div class="notif-dot" style="background:var(--greenL)"></div>
-          <div><div class="notif-text">تجديد الاشتراك المميز تم بنجاح</div><div class="notif-time">أمس</div></div>
+          <div><div class="notif-text">يوم التأسيس قادم — ابدأ بإعداد عروضك</div><div class="notif-time">تذكير تلقائي</div></div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     ADD DEAL MODAL
-══════════════════════════════════ -->
+<!-- ADD DEAL MODAL -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
@@ -987,37 +829,32 @@ option{background:var(--bg3);}
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">السعر الأصلي (ر.س)</label>
-        <input class="form-input" type="number" placeholder="٩٩٩٩" id="deal-price-old">
+        <input class="form-input" type="number" placeholder="9999" id="deal-price-old">
       </div>
       <div class="form-group">
         <label class="form-label">سعر العرض (ر.س)</label>
-        <input class="form-input" type="number" placeholder="٥٩٩٩" id="deal-price-new">
+        <input class="form-input" type="number" placeholder="5999" id="deal-price-new">
       </div>
     </div>
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">الفئة</label>
         <select class="form-select" id="deal-cat">
-          <option>غرف الجلوس</option>
-          <option>غرف النوم</option>
-          <option>طاولات وكراسي</option>
-          <option>ديكور</option>
-          <option>مكاتب</option>
-          <option>أثاث أطفال</option>
+          <option value="living_room">غرف الجلوس</option>
+          <option value="bedroom">غرف النوم</option>
+          <option value="office">مكاتب</option>
+          <option value="decor">ديكور</option>
+          <option value="mixed">متنوع</option>
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">تاريخ انتهاء العرض</label>
-        <input class="form-input" type="date" id="deal-end">
+        <label class="form-label">وصف مختصر</label>
+        <input class="form-input" type="text" placeholder="مثال: متوفر بألوان متعددة" id="deal-desc">
       </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">وصف مختصر (اختياري)</label>
-      <input class="form-input" type="text" placeholder="مثال: متوفر بألوان متعددة، التوصيل مجاني" id="deal-desc">
     </div>
 
     <div class="modal-actions">
-      <button class="modal-submit" onclick="submitDeal()">نشر العرض ✓</button>
+      <button class="modal-submit" onclick="submitDeal()" id="submit-deal-btn">نشر العرض ✓</button>
       <button class="modal-cancel" onclick="closeModal()">إلغاء</button>
     </div>
   </div>
@@ -1027,7 +864,32 @@ option{background:var(--bg3);}
 <div class="toast" id="toastEl"></div>
 
 <script>
-/* ─── Cursor ─── */
+// ═══════════════════════════════════════
+// SUPABASE INIT
+// ═══════════════════════════════════════
+const SUPABASE_URL = 'https://avigdujywxlgahoakdvj.supabase.co';
+const SUPABASE_KEY = document.querySelector('meta[name="sb-key"]')?.content || window._sbkey || '';
+
+// سنضع المفتاح مباشرة هنا مؤقتاً
+const { createClient } = supabase;
+let sb;
+
+// سيتم تهيئة Supabase بعد تحميل الصفحة
+window.addEventListener('DOMContentLoaded', async () => {
+  // نقرأ المفتاح من meta tag أو من الكود مباشرة
+  sb = createClient(SUPABASE_URL, 'sb_publishable_O8PBOziG71unQ917IG30sw_7iQHwugv');
+  
+  // تحقق من الجلسة الحالية
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    await loadDashboard(session.user);
+    showPage('dashboard');
+  }
+});
+
+// ═══════════════════════════════════════
+// CURSOR
+// ═══════════════════════════════════════
 const cur=document.getElementById('cur'),curR=document.getElementById('curR');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{
@@ -1039,41 +901,55 @@ document.addEventListener('mousemove',e=>{
   curR.style.transform=`translate(${rx}px,${ry}px)`;
   requestAnimationFrame(loop);
 })();
-document.querySelectorAll('button,a,[onclick],.deal-card,.ts-item,.docc-card,.occ-tab').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{curR.style.width='44px';curR.style.height='44px';});
-  el.addEventListener('mouseleave',()=>{curR.style.width='30px';curR.style.height='30px';});
-});
 
-/* ─── Page routing ─── */
+// ═══════════════════════════════════════
+// PAGE ROUTING
+// ═══════════════════════════════════════
 function showPage(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   window.scrollTo(0,0);
-
-  // Header store btn label
   const btn=document.getElementById('store-login-btn');
   if(name==='dashboard'){
-    btn.innerHTML='<span>🛋️</span> هوم سنتر';
-    btn.onclick=()=>showToast('أنت مسجّل الدخول بالفعل!');
+    btn.innerHTML='<span>🛋️</span> لوحة التحكم';
+    btn.onclick=()=>showPage('dashboard');
   } else {
     btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;opacity:.6"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg> دخول المحلات`;
     btn.onclick=()=>showPage('login');
   }
 }
 
-/* ─── Login ─── */
-function doLogin(){
-  const u=document.getElementById('login-user').value.trim();
-  const p=document.getElementById('login-pass').value.trim();
-  if(!u||!p){showToast('⚠️ أدخل اسم المستخدم وكلمة المرور');return;}
-  if(u==='homecenter'&&p==='1234'){
-    showToast('✅ مرحباً! جاري تسجيل الدخول...');
-    setTimeout(()=>showPage('dashboard'),800);
-  } else {
-    showToast('❌ بيانات غير صحيحة — جرب: homecenter / 1234');
+// ═══════════════════════════════════════
+// LOGIN — Supabase Auth
+// ═══════════════════════════════════════
+async function doLogin(){
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value.trim();
+  if(!email||!pass){ showToast('⚠️ أدخل البريد الإلكتروني وكلمة المرور'); return; }
+
+  const btn = document.getElementById('login-submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = 'جاري الدخول... <span class="spinner"></span>';
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+
+  if(error){
+    showToast('❌ بيانات غير صحيحة');
+    btn.disabled = false;
+    btn.innerHTML = 'تسجيل الدخول';
+    return;
   }
+
+  showToast('✅ مرحباً! جاري تحميل لوحة التحكم...');
+  await loadDashboard(data.user);
+  setTimeout(()=>showPage('dashboard'), 800);
+  btn.disabled = false;
+  btn.innerHTML = 'تسجيل الدخول';
 }
-document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+
+document.getElementById('login-pass').addEventListener('keydown', e => {
+  if(e.key==='Enter') doLogin();
+});
 
 function togglePass(){
   const inp=document.getElementById('login-pass');
@@ -1082,100 +958,177 @@ function togglePass(){
   else{inp.type='password';btn.textContent='👁️';}
 }
 
-function doLogout(){
+// ═══════════════════════════════════════
+// LOGOUT
+// ═══════════════════════════════════════
+async function doLogout(){
+  await sb.auth.signOut();
   showToast('👋 تم تسجيل الخروج');
-  setTimeout(()=>showPage('home'),600);
+  setTimeout(()=>showPage('home'), 600);
 }
 
-/* ─── Dashboard ─── */
-function toggleOcc(id){
-  const card=document.getElementById(id);
-  card.classList.toggle('open');
-  const btn=card.querySelector('.btn-view-deals');
-  btn.textContent=card.classList.contains('open')?'▲ إخفاء':'▼ عرض';
+// ═══════════════════════════════════════
+// LOAD DASHBOARD
+// ═══════════════════════════════════════
+let currentStore = null;
+
+async function loadDashboard(user){
+  // جلب بيانات المتجر
+  const { data: stores } = await sb
+    .from('stores')
+    .select('*')
+    .eq('owner_id', user.id)
+    .single();
+
+  if(stores){
+    currentStore = stores;
+    document.getElementById('dash-store-name').textContent = stores.name_ar;
+    document.getElementById('dash-store-email').textContent = user.email;
+
+    // جلب المنتجات
+    await loadProducts();
+  } else {
+    document.getElementById('dash-store-name').textContent = user.email;
+    document.getElementById('dash-store-email').textContent = 'لا يوجد متجر مرتبط';
+  }
 }
 
-/* ─── Modal ─── */
-let currentOcc='';
-function openModal(occ){
-  currentOcc=occ;
-  document.getElementById('modal-occ-name').textContent='المناسبة: '+occ;
-  document.getElementById('deal-name').value='';
-  document.getElementById('deal-price-old').value='';
-  document.getElementById('deal-price-new').value='';
-  document.getElementById('deal-desc').value='';
-  document.getElementById('modal').classList.add('open');
-}
-function closeModal(){document.getElementById('modal').classList.remove('open');}
+async function loadProducts(){
+  if(!currentStore) return;
 
-function submitDeal(){
-  const name=document.getElementById('deal-name').value.trim();
-  const pOld=document.getElementById('deal-price-old').value;
-  const pNew=document.getElementById('deal-price-new').value;
-  if(!name||!pOld||!pNew){showToast('⚠️ أدخل اسم المنتج والسعرين');return;}
+  const { data: products } = await sb
+    .from('products')
+    .select('*')
+    .eq('store_id', currentStore.id)
+    .eq('is_available', true)
+    .order('created_at', { ascending: false });
 
-  const disc=Math.round((1-(pNew/pOld))*100);
-  const occId='occ-'+currentOcc.replace(/\s+/g,'-').replace(/[٠-٩]/g,d=>'0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]);
+  if(!products) return;
 
-  // Find the deals container for this occasion
-  const containers={
-    'عيد الفطر ١٤٤٧':'deals-occ-eid',
-    'يوم التأسيس':'deals-occ-taasis',
-    'رمضان ١٤٤٧':'deals-occ-ramadan',
-    'اليوم الوطني ٩٦':'deals-occ-national',
+  // تحديث عدد العروض
+  document.getElementById('stat-products').textContent = products.length.toString();
+
+  // تفريغ قوائم العروض
+  const containers = {
+    'عيد الفطر ١٤٤٧': 'deals-occ-eid',
+    'يوم التأسيس': 'deals-occ-taasis',
+    'رمضان ١٤٤٧': 'deals-occ-ramadan',
+    'اليوم الوطني ٩٦': 'deals-occ-national',
   };
-  const containerId=containers[currentOcc];
-  if(containerId){
-    const container=document.getElementById(containerId);
-    // Remove empty message
-    const empty=container.querySelector('.docc-empty');
-    if(empty)empty.remove();
-    // Add deal row
-    container.insertAdjacentHTML('beforeend',`
-      <div class="ddeal-row">
+
+  // إعادة تعيين الكل
+  Object.values(containers).forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.innerHTML = '<div class="docc-empty">لا توجد عروض بعد</div>';
+  });
+
+  // عرض المنتجات
+  products.forEach(p => {
+    const disc = Math.round((1 - p.discounted_price/p.original_price)*100);
+    const html = `
+      <div class="ddeal-row" id="product-${p.id}">
         <span class="ddeal-emoji">🛋️</span>
         <div class="ddeal-info">
-          <div class="ddeal-name">${name}</div>
-          <div class="ddeal-price">السعر الجديد: <strong>${Number(pNew).toLocaleString('ar-SA')} ر.س</strong> · الأصلي: ${Number(pOld).toLocaleString('ar-SA')} ر.س</div>
+          <div class="ddeal-name">${p.name_ar}</div>
+          <div class="ddeal-price">السعر الجديد: <strong>${p.discounted_price.toLocaleString('ar-SA')} ر.س</strong> · الأصلي: ${p.original_price.toLocaleString('ar-SA')} ر.س</div>
         </div>
         <span class="ddeal-disc">-${disc}٪</span>
         <div class="ddeal-actions">
-          <button class="icon-btn" onclick="showToast('✏️ فتح التعديل...')">✏️</button>
-          <button class="icon-btn del" onclick="this.closest('.ddeal-row').remove();showToast('🗑️ تم حذف العرض!')">🗑️</button>
+          <button class="icon-btn del" onclick="deleteProduct('${p.id}')">🗑️</button>
         </div>
-      </div>
-    `);
-    // Open the card
-    const occCard=containerId.replace('deals-occ-','occ-');
-    const card=document.getElementById('occ-'+occCard.split('occ-')[1]);
-    if(card)card.classList.add('open');
+      </div>`;
+
+    // نحدد القسم بناءً على الوصف أو نضعه في عيد الفطر افتراضياً
+    const container = document.getElementById('deals-occ-eid');
+    if(container){
+      const empty = container.querySelector('.docc-empty');
+      if(empty) empty.remove();
+      container.insertAdjacentHTML('beforeend', html);
+    }
+  });
+}
+
+// ═══════════════════════════════════════
+// DELETE PRODUCT
+// ═══════════════════════════════════════
+async function deleteProduct(id){
+  const { error } = await sb.from('products').delete().eq('id', id);
+  if(error){ showToast('❌ حدث خطأ'); return; }
+  document.getElementById('product-'+id)?.remove();
+  showToast('🗑️ تم حذف العرض');
+  await loadProducts();
+}
+
+// ═══════════════════════════════════════
+// MODAL & ADD DEAL
+// ═══════════════════════════════════════
+let currentOcc = '';
+function openModal(occ){
+  currentOcc = occ;
+  document.getElementById('modal-occ-name').textContent = 'المناسبة: ' + occ;
+  document.getElementById('deal-name').value = '';
+  document.getElementById('deal-price-old').value = '';
+  document.getElementById('deal-price-new').value = '';
+  document.getElementById('deal-desc').value = '';
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+
+async function submitDeal(){
+  const name  = document.getElementById('deal-name').value.trim();
+  const pOld  = parseFloat(document.getElementById('deal-price-old').value);
+  const pNew  = parseFloat(document.getElementById('deal-price-new').value);
+  const cat   = document.getElementById('deal-cat').value;
+  const desc  = document.getElementById('deal-desc').value.trim();
+
+  if(!name||!pOld||!pNew){ showToast('⚠️ أدخل اسم المنتج والسعرين'); return; }
+  if(!currentStore){ showToast('❌ لا يوجد متجر مرتبط'); return; }
+
+  const btn = document.getElementById('submit-deal-btn');
+  btn.disabled = true;
+  btn.innerHTML = 'جاري النشر... <span class="spinner"></span>';
+
+  const { error } = await sb.from('products').insert({
+    store_id: currentStore.id,
+    name_ar: name,
+    description: desc,
+    category: cat,
+    original_price: pOld,
+    discounted_price: pNew,
+    is_available: true,
+    is_featured: false,
+  });
+
+  btn.disabled = false;
+  btn.innerHTML = 'نشر العرض ✓';
+
+  if(error){
+    showToast('❌ حدث خطأ: ' + error.message);
+    return;
   }
 
   closeModal();
   showToast('✅ تم نشر العرض بنجاح!');
+  await loadProducts();
 }
 
-/* ─── Performance bars ─── */
-const perfs=[
-  {lbl:'رمضان',h:65},{lbl:'عيد فطر',h:90},{lbl:'وطني',h:80},
-  {lbl:'أضحى',h:70},{lbl:'تأسيس',h:45},{lbl:'مدارس',h:55}
-];
-const barsEl=document.getElementById('perf-bars');
-perfs.forEach(p=>{
-  barsEl.innerHTML+=`<div class="perf-bar-wrap">
-    <div class="perf-bar${p.h>=80?' hi':''}" style="height:${p.h}%"></div>
-    <span class="perf-lbl">${p.lbl}</span>
-  </div>`;
-});
+function toggleOcc(id){
+  const card = document.getElementById(id);
+  card.classList.toggle('open');
+  const btn = card.querySelector('.btn-view-deals');
+  btn.textContent = card.classList.contains('open') ? '▲ إخفاء' : '▼ عرض';
+}
 
-/* ─── Toast ─── */
+// ═══════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════
 function showToast(msg){
-  const t=document.getElementById('toastEl');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2800);
+  const t = document.getElementById('toastEl');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
 }
-// expose globally
-window.showToast=showToast;
+window.showToast = showToast;
 </script>
 </body>
 </html>
