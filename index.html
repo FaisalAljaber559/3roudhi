@@ -578,7 +578,7 @@ function setOccTab(el){document.querySelectorAll(".occ-tab").forEach(t=>t.classL
 async function loadStores(){
   const{data:stores}=await sb.from("stores").select("*").limit(8);
   const grid=document.getElementById("stores-grid");
-  if(!stores||stores.length===0){grid.innerHTML="<div style="grid-column:span 4;text-align:center;padding:20px;color:var(--muted);font-size:13px">لا توجد متاجر مشاركة بعد</div>";return;}
+  if(!stores||stores.length===0){grid.innerHTML='<div style="grid-column:span 4;text-align:center;padding:20px;color:var(--muted);font-size:13px">لا توجد متاجر مشاركة بعد</div>';return;}
   grid.innerHTML="";
   stores.forEach(s=>{
     grid.insertAdjacentHTML("beforeend",`<div class="store-card"><div class="store-avatar">🛋️</div><div><div class="store-name">${s.name_ar}</div><div class="store-meta">${s.city||"الرياض"}</div><div class="store-verified">✅ موثّق</div></div></div>`);
