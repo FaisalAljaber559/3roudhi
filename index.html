@@ -13,7 +13,7 @@
 *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
 body{font-family:"Cairo",sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
 button,input,select,textarea{font-family:"Cairo",sans-serif;}a{text-decoration:none;color:inherit;}
-.page{display:none;min-height:100vh;}.page.active{display:block;}#page-login.active{display:flex;}
+.page{display:none;min-height:100vh;}.page.active{display:block;}#page-login.active{display:flex!important;}
 
 /* HEADER */
 .header{position:fixed;top:0;width:100%;z-index:300;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);box-shadow:0 1px 0 rgba(0,0,0,0.04);}
@@ -154,7 +154,7 @@ button,input,select,textarea{font-family:"Cairo",sans-serif;}a{text-decoration:n
 .soc:hover{background:var(--orangeP);border-color:rgba(255,122,0,.3);}
 
 /* LOGIN */
-#page-login{min-height:100vh;align-items:center;justify-content:center;background:var(--bg);}
+#page-login{min-height:100vh;align-items:center;justify-content:center;background:var(--bg);display:none;}
 .login-wrap{width:100%;max-width:440px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:44px;box-shadow:var(--shadowL);}
 .login-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;margin-bottom:28px;transition:color .2s;}
 .login-back:hover{color:var(--text);}
@@ -518,7 +518,7 @@ function showPage(n){
 
 async function loadStats(){
   const{count:d}=await sb.from("products").select("*",{count:"exact",head:true}).eq("is_available",true);
-  const{count:s}=await sb.from("stores").select("*",{count:"exact",head:true}).eq("is_active",true);
+  const{count:s}=await sb.from("stores").select("*",{count:"exact",head:true});
   if(d)document.getElementById("stat-total-deals").textContent=d.toString();
   if(s)document.getElementById("stat-total-stores").textContent=s.toString();
 }
@@ -576,7 +576,7 @@ function filterCat(el,cat){
 function setOccTab(el){document.querySelectorAll(".occ-tab").forEach(t=>t.classList.remove("active"));el.classList.add("active");}
 
 async function loadStores(){
-  const{data:stores}=await sb.from("stores").select("*").eq("is_active",true).limit(8);
+  const{data:stores}=await sb.from("stores").select("*").limit(8);
   const grid=document.getElementById("stores-grid");
   if(!stores||stores.length===0){grid.innerHTML="<div style="grid-column:span 4;text-align:center;padding:20px;color:var(--muted);font-size:13px">لا توجد متاجر مشاركة بعد</div>";return;}
   grid.innerHTML="";
