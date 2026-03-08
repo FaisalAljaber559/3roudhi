@@ -383,6 +383,25 @@ button,input,select,textarea{font-family:"Cairo",sans-serif;}a{text-decoration:n
 .report-btn:hover{background:var(--blueL);}
 .no-events{text-align:center;padding:20px;font-size:13px;color:var(--dim);}
 
+
+/* IMAGE UPLOAD */
+.img-tabs{display:flex;gap:0;background:var(--bg3);border-radius:8px;padding:3px;margin-bottom:12px;}
+.img-tab{flex:1;padding:7px;border-radius:6px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;text-align:center;transition:all .2s;}
+.img-tab.active{background:var(--bg2);color:var(--orange);box-shadow:var(--shadow);}
+.upload-area{border:2px dashed var(--border);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+.upload-area:hover{border-color:var(--orange);background:var(--orangeP);}
+.upload-area.dragover{border-color:var(--orange);background:var(--orangeP);}
+.upload-icon{font-size:32px;margin-bottom:8px;}
+.upload-text{font-size:13px;font-weight:600;color:var(--muted);}
+.upload-sub{font-size:11px;color:var(--dim);margin-top:4px;}
+.upload-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.uploaded-imgs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.uploaded-img-wrap{position:relative;width:70px;height:70px;}
+.uploaded-img{width:70px;height:70px;object-fit:cover;border-radius:8px;border:1px solid var(--border);}
+.uploaded-img-rm{position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;background:var(--red);color:#fff;border:none;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.upload-progress{height:4px;background:var(--bg3);border-radius:2px;margin-top:8px;overflow:hidden;display:none;}
+.upload-progress-bar{height:100%;background:var(--orange);border-radius:2px;transition:width .3s;}
+
 </style>
 </head>
 <body>
@@ -606,7 +625,29 @@ button,input,select,textarea{font-family:"Cairo",sans-serif;}a{text-decoration:n
     <div class="form-group"><label class="form-label">اسم المنتج / العرض</label><input class="form-input" type="text" placeholder="مثال: طقم كنب ٥ قطع جلد طبيعي" id="deal-name"></div>
     <div class="form-row"><div class="form-group"><label class="form-label">السعر الأصلي (ر.س)</label><input class="form-input" type="number" placeholder="9999" id="deal-price-old"></div><div class="form-group"><label class="form-label">سعر العرض (ر.س)</label><input class="form-input" type="number" placeholder="5999" id="deal-price-new"></div></div>
     <div class="form-row"><div class="form-group"><label class="form-label">الفئة</label><select class="form-select" id="deal-cat"><option value="living_room">غرف الجلوس</option><option value="bedroom">غرف النوم</option><option value="office">مكاتب وطاولات</option><option value="decor">ديكور</option><option value="mixed">متنوع</option></select></div><div class="form-group"><label class="form-label">وصف مختصر</label><input class="form-input" type="text" placeholder="مثال: متوفر بألوان متعددة" id="deal-desc"></div></div>
-    <div class="form-group"><label class="form-label">صور المنتج (روابط URL)</label><div class="img-url-list" id="img-url-list"><div class="img-url-row"><input class="form-input img-url-input" type="url" placeholder="https://example.com/image.jpg"></div></div><button class="btn-add-img" onclick="addImgField()">+ إضافة صورة أخرى</button></div>
+    <div class="form-group">
+      <label class="form-label">صور المنتج</label>
+      <div class="img-tabs">
+        <div class="img-tab active" onclick="switchImgTab(this,'upload')">📁 رفع صورة</div>
+        <div class="img-tab" onclick="switchImgTab(this,'url')">🔗 رابط URL</div>
+      </div>
+      <!-- رفع صورة -->
+      <div id="tab-upload">
+        <div class="upload-area" id="upload-area">
+          <input type="file" class="upload-input" id="img-file-input" accept="image/*" multiple onchange="handleFileUpload(this.files)">
+          <div class="upload-icon">🖼️</div>
+          <div class="upload-text">اسحب الصور هنا أو اضغط للاختيار</div>
+          <div class="upload-sub">JPG, PNG, WEBP — حجم أقصى 5MB للصورة</div>
+        </div>
+        <div class="upload-progress" id="upload-progress"><div class="upload-progress-bar" id="upload-progress-bar"></div></div>
+        <div class="uploaded-imgs" id="uploaded-imgs"></div>
+      </div>
+      <!-- رابط URL -->
+      <div id="tab-url" style="display:none">
+        <div class="img-url-list" id="img-url-list"><div class="img-url-row"><input class="form-input img-url-input" type="url" placeholder="https://example.com/image.jpg"></div></div>
+        <button class="btn-add-img" onclick="addImgField()">+ إضافة رابط آخر</button>
+      </div>
+    </div>
     <div class="modal-actions"><button class="modal-submit" onclick="submitDeal()" id="submit-deal-btn">نشر العرض ✓</button><button class="modal-cancel" onclick="closeModal()">إلغاء</button></div>
   </div>
 </div>
@@ -776,7 +817,7 @@ async function deleteProduct(id){
 }
 
 let currentOcc="";
-function openModal(occ){currentOcc=occ;document.getElementById("modal-occ-name").textContent="المناسبة: "+occ;["deal-name","deal-price-old","deal-price-new","deal-desc"].forEach(id=>document.getElementById(id).value="");document.getElementById("img-url-list").innerHTML='<div class="img-url-row"><input class="form-input img-url-input" type="url" placeholder="https://example.com/image.jpg"></div>';document.getElementById("modal").classList.add("open");}
+function openModal(occ){currentOcc=occ;document.getElementById("modal-occ-name").textContent="المناسبة: "+occ;["deal-name","deal-price-old","deal-price-new","deal-desc"].forEach(id=>document.getElementById(id).value="");document.getElementById("img-url-list").innerHTML='<div class="img-url-row"><input class="form-input img-url-input" type="url" placeholder="https://example.com/image.jpg"></div>';uploadedImageUrls=[];document.getElementById('uploaded-imgs').innerHTML='';document.getElementById("modal").classList.add("open");}
 function closeModal(){document.getElementById("modal").classList.remove("open");}
 function addImgField(){document.getElementById("img-url-list").insertAdjacentHTML("beforeend",`<div class="img-url-row"><input class="form-input img-url-input" type="url" placeholder="https://example.com/image.jpg"><button class="btn-rm-img" onclick="this.parentElement.remove()">✕</button></div>`);}
 
@@ -786,7 +827,10 @@ async function submitDeal(){
   const pNew=parseFloat(document.getElementById("deal-price-new").value);
   const cat=document.getElementById("deal-cat").value;
   const desc=document.getElementById("deal-desc").value.trim();
-  const imgs=[...document.querySelectorAll(".img-url-input")].map(i=>i.value.trim()).filter(Boolean);
+  const activeTab = document.querySelector('.img-tab.active').textContent.includes('رفع') ? 'upload' : 'url';
+  const imgs = activeTab === 'upload'
+    ? uploadedImageUrls
+    : [...document.querySelectorAll('.img-url-input')].map(i=>i.value.trim()).filter(Boolean);
   if(!name||!pOld||!pNew){showToast("⚠️ أدخل اسم المنتج والسعرين");return;}
   if(!currentStore){showToast("❌ لا يوجد متجر مرتبط");return;}
   const btn=document.getElementById("submit-deal-btn");btn.disabled=true;btn.innerHTML='جاري النشر... <span class="spinner"></span>';
@@ -935,6 +979,73 @@ function generateReport() {
   a.click();
   showToast('📄 تم تصدير التقرير بنجاح!');
 }
+
+
+// ═══════════════════════════════════════
+// IMAGE UPLOAD
+// ═══════════════════════════════════════
+let uploadedImageUrls = [];
+
+function switchImgTab(el, tab) {
+  document.querySelectorAll('.img-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-upload').style.display = tab === 'upload' ? 'block' : 'none';
+  document.getElementById('tab-url').style.display = tab === 'url' ? 'block' : 'none';
+}
+
+async function handleFileUpload(files) {
+  if (!files || files.length === 0) return;
+  if (!currentStore) { showToast('❌ يجب تسجيل الدخول أولاً'); return; }
+  
+  const progress = document.getElementById('upload-progress');
+  const progressBar = document.getElementById('upload-progress-bar');
+  progress.style.display = 'block';
+  
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (file.size > 5 * 1024 * 1024) { showToast('⚠️ الصورة أكبر من 5MB: ' + file.name); continue; }
+    
+    const ext = file.name.split('.').pop();
+    const fileName = `${currentStore.id}/${Date.now()}-${i}.${ext}`;
+    
+    progressBar.style.width = ((i / files.length) * 80 + 10) + '%';
+    
+    const { data, error } = await sb.storage.from('product-images').upload(fileName, file, { upsert: true });
+    
+    if (error) { showToast('❌ خطأ في رفع الصورة'); continue; }
+    
+    const { data: urlData } = sb.storage.from('product-images').getPublicUrl(fileName);
+    const publicUrl = urlData.publicUrl;
+    
+    uploadedImageUrls.push(publicUrl);
+    
+    // عرض الصورة
+    const wrap = document.createElement('div');
+    wrap.className = 'uploaded-img-wrap';
+    wrap.innerHTML = `<img src="${publicUrl}" class="uploaded-img"><button class="uploaded-img-rm" onclick="removeUploadedImg(this,'${publicUrl}')">✕</button>`;
+    document.getElementById('uploaded-imgs').appendChild(wrap);
+  }
+  
+  progressBar.style.width = '100%';
+  setTimeout(() => { progress.style.display = 'none'; progressBar.style.width = '0%'; }, 800);
+  showToast('✅ تم رفع ' + files.length + ' صورة بنجاح!');
+}
+
+function removeUploadedImg(btn, url) {
+  uploadedImageUrls = uploadedImageUrls.filter(u => u !== url);
+  btn.parentElement.remove();
+}
+
+// Drag & drop
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const area = document.getElementById('upload-area');
+    if (!area) return;
+    area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('dragover'); });
+    area.addEventListener('dragleave', () => area.classList.remove('dragover'));
+    area.addEventListener('drop', e => { e.preventDefault(); area.classList.remove('dragover'); handleFileUpload(e.dataTransfer.files); });
+  }, 1000);
+});
 
 function showToast(msg){const t=document.getElementById("toastEl");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800);}
 window.showToast=showToast;
