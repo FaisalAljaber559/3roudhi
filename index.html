@@ -2,6 +2,14 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-60P48XPE7P"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-60P48XPE7P');
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>عُروضي | أفضل عروض الأثاث في الرياض – خصومات تصل إلى ٧٠٪</title>
 <meta name="description" content="منصة عروض الأثاث الأولى في الرياض – تصفح أحدث الخصومات من أكبر محلات الأثاث">
@@ -557,6 +565,30 @@ const SUPABASE_URL="https://avigdujywxlgahoakdvj.supabase.co";
 const SUPABASE_ANON="sb_publishable_O8PBOziG71unQ917IG30sw_7iQHwugv";
 const{createClient}=supabase;let sb;
 
+
+// ═══════════════════════════════════════
+// EVENT TRACKING
+// ═══════════════════════════════════════
+async function trackEvent(eventType, productId, storeId, extra) {
+  try {
+    // Google Analytics
+    gtag('event', eventType, {
+      product_id: productId,
+      store_id: storeId,
+      ...extra
+    });
+    // Supabase
+    await sb.from('events').insert({
+      event_type: eventType,
+      product_id: productId || null,
+      store_id: storeId || null,
+      metadata: extra || {},
+      created_at: new Date().toISOString()
+    });
+  } catch(e) { console.log('Track error:', e); }
+}
+window.trackEvent = trackEvent;
+
 window.addEventListener("DOMContentLoaded",async()=>{
   sb=createClient(SUPABASE_URL,SUPABASE_ANON);
   const{data:{session}}=await sb.auth.getSession();
@@ -723,9 +755,9 @@ function openProductDetail(product,store){
   const sn=store?.name_ar||"المتجر";
   const wa=store?.whatsapp||"";const ph=store?.phone||"";const ws=store?.website_url||"";const mp=store?.google_maps_url||"";const addr=store?.address||"الرياض، المملكة العربية السعودية";
   let acts="";
-  if(wa)acts+=`<a class="detail-btn detail-btn-wa" href="https://wa.me/${wa.replace(/\D/g,"")}" target="_blank">💬 واتساب</a>`;
-  if(ph)acts+=`<a class="detail-btn detail-btn-phone" href="tel:${ph}">📞 اتصال</a>`;
-  if(ws)acts+=`<a class="detail-btn detail-btn-site" href="${ws}" target="_blank">🌐 الموقع</a>`;
+  if(wa)acts+=`<a class="detail-btn detail-btn-wa" href="https://wa.me/${wa.replace(/\D/g,"")}" target="_blank" onclick="trackEvent('contact_whatsapp','${product.id}','${store?.id}',{store_name:'${sn}'})">💬 واتساب</a>`;
+  if(ph)acts+=`<a class="detail-btn detail-btn-phone" href="tel:${ph}" onclick="trackEvent('contact_phone','${product.id}','${store?.id}',{store_name:'${sn}'})">📞 اتصال</a>`;
+  if(ws)acts+=`<a class="detail-btn detail-btn-site" href="${ws}" target="_blank" onclick="trackEvent('contact_website','${product.id}','${store?.id}',{store_name:'${sn}'})">🌐 الموقع</a>`;
   if(!acts)acts=`<button class="detail-btn detail-btn-phone" onclick="showToast('📞 تواصل مع المتجر مباشرة')">📞 تواصل مع المتجر</button>`;
   const mapsSection=mp?`<div class="detail-maps"><div class="detail-maps-title">📍 موقع المتجر</div><a class="detail-maps-link" href="${mp}" target="_blank"><span style="font-size:18px">📍</span><div class="maps-info"><div class="maps-name">${sn}</div><div class="maps-addr">${addr}</div></div><span>←</span></a></div>`:`<div class="detail-maps"><div class="detail-maps-title">📍 موقع المتجر</div><div class="detail-maps-link" style="opacity:.5"><span style="font-size:18px">📍</span><div class="maps-info"><div class="maps-name">${sn}</div><div class="maps-addr">${addr}</div></div></div></div>`;
   document.getElementById("detail-modal-inner").innerHTML=`
@@ -741,6 +773,7 @@ function openProductDetail(product,store){
       <div class="detail-reviews"><div class="detail-reviews-title">تقييمات العملاء</div><div class="stars-row"><span class="star on">★</span><span class="star on">★</span><span class="star on">★</span><span class="star on">★</span><span class="star">★</span><span class="review-avg">4.0</span><span class="review-count">(قريباً)</span></div></div>
     </div>`;
   document.getElementById("detail-overlay").classList.add("open");document.body.style.overflow="hidden";
+  trackEvent("product_view", product.id, store?.id, {product_name: product.name_ar, store_name: store?.name_ar});
 }
 function closeProductDetail(){document.getElementById("detail-overlay").classList.remove("open");document.body.style.overflow="";}
 function galleryMove(dir){if(gImgs.length<=1)return;gi=(gi+dir+gImgs.length)%gImgs.length;document.getElementById("gallery-imgs").style.transform=`translateX(${gi*100}%)`;document.querySelectorAll(".gallery-dot").forEach((d,i)=>d.classList.toggle("active",i===gi));}
