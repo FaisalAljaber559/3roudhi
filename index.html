@@ -1013,11 +1013,12 @@ async function handleFileUpload(files) {
     
     progressBar.style.width = ((i / files.length) * 80 + 10) + '%';
     
-    const { data, error } = await sb.storage.from('product-images').upload(fileName, file, { upsert: true });
+    const { data, error } = await sb.storage.from('product-images').upload(fileName, file);
     
     if (error) { console.error('Upload error:', error); showToast('❌ ' + (error.message || 'خطأ في رفع الصورة')); continue; }
     
     const publicUrl = `https://avigdujywxlgahoakdvj.supabase.co/storage/v1/object/public/product-images/${fileName}`;
+    console.log('Uploaded URL:', publicUrl);
     
     uploadedImageUrls.push(publicUrl);
     
