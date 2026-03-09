@@ -1013,7 +1013,7 @@ async function handleFileUpload(files) {
     
     const { data, error } = await sb.storage.from('product-images').upload(fileName, file, { upsert: true });
     
-    if (error) { showToast('❌ خطأ في رفع الصورة'); continue; }
+    if (error) { console.error('Upload error:', error); showToast('❌ ' + (error.message || 'خطأ في رفع الصورة')); continue; }
     
     const { data: urlData } = sb.storage.from('product-images').getPublicUrl(fileName);
     const publicUrl = urlData.publicUrl;
