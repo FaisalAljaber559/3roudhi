@@ -996,6 +996,8 @@ function switchImgTab(el, tab) {
 
 async function handleFileUpload(files) {
   if (!files || files.length === 0) return;
+  console.log('currentStore:', currentStore);
+  console.log('files:', files.length);
   if (!currentStore) { showToast('❌ يجب تسجيل الدخول أولاً'); return; }
   
   const progress = document.getElementById('upload-progress');
