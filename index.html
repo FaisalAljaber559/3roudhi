@@ -1015,8 +1015,7 @@ async function handleFileUpload(files) {
     
     if (error) { console.error('Upload error:', error); showToast('❌ ' + (error.message || 'خطأ في رفع الصورة')); continue; }
     
-    const { data: urlData } = sb.storage.from('product-images').getPublicUrl(fileName);
-    const publicUrl = urlData.publicUrl;
+    const publicUrl = `https://avigdujywxlgahoakdvj.supabase.co/storage/v1/object/public/product-images/${fileName}`;
     
     uploadedImageUrls.push(publicUrl);
     
