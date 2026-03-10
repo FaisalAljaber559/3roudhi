@@ -1114,9 +1114,52 @@ window.openLightbox = openLightbox;
 // ═══════════════════════════════════════
 let editingProductId = null;
 
+let editUploadedImageUrls = [];
+
+function handleEditFileDrop(e) {
+  e.preventDefault();
+  handleEditFileUpload(e.dataTransfer.files);
+}
+
+async function handleEditFileUpload(files) {
+  if (!files || files.length === 0) return;
+  if (!currentStore) { showToast('❌ يجب تسجيل الدخول أولاً'); return; }
+  const prog = document.getElementById('edit-upload-progress');
+  prog.style.display = 'block';
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (file.size > 5 * 1024 * 1024) { showToast('❌ حجم الصورة أكبر من 5MB'); continue; }
+    const ext = file.name.split('.').pop();
+    const fileName = `${currentStore.id}/${Date.now()}-${i}.${ext}`;
+    prog.innerHTML = `<div class="upload-bar"><div class="upload-fill" style="width:60%"></div></div><div style="font-size:12px;color:var(--dim);margin-top:4px">جاري الرفع...</div>`;
+    const { data, error } = await sb.storage.from('product-images').upload(fileName, file);
+    if (error) { showToast('❌ ' + (error.message || 'خطأ في رفع الصورة')); continue; }
+    const publicUrl = `https://avigdujywxlgahoakdvj.supabase.co/storage/v1/object/public/product-images/${fileName}`;
+    editUploadedImageUrls.push(publicUrl);
+    const localUrl = URL.createObjectURL(file);
+    const wrap = document.createElement('div');
+    wrap.className = 'uploaded-img-wrap';
+    wrap.innerHTML = `<img src="${localUrl}" class="uploaded-img"><button class="uploaded-img-rm" onclick="removeEditUploadedImg(this,'${publicUrl}')">✕</button>`;
+    document.getElementById('edit-uploaded-imgs').appendChild(wrap);
+    prog.innerHTML = `<div style="font-size:12px;color:var(--green)">✅ تم رفع الصورة بنجاح</div>`;
+  }
+  setTimeout(() => { prog.style.display = 'none'; }, 2000);
+}
+
+function removeEditUploadedImg(btn, url) {
+  btn.parentElement.remove();
+  editUploadedImageUrls = editUploadedImageUrls.filter(u => u !== url);
+}
+
+window.handleEditFileUpload = handleEditFileUpload;
+window.handleEditFileDrop = handleEditFileDrop;
+window.removeEditUploadedImg = removeEditUploadedImg;
+
 async function openEditDeal(productId) {
   const { data, error } = await sb.from('products').select('*').eq('id', productId).single();
   if (error || !data) { showToast('❌ تعذر تحميل بيانات العرض'); return; }
+  editUploadedImageUrls = [];
+  document.getElementById('edit-uploaded-imgs').innerHTML = '';
   editingProductId = productId;
   document.getElementById('edit-name').value = data.name_ar || '';
   document.getElementById('edit-price-old').value = data.original_price || '';
@@ -1149,8 +1192,11 @@ async function saveEditDeal() {
   if (!name || !pOld || !pNew) { showToast('⚠️ أدخل اسم المنتج والسعرين'); return; }
   const btn = document.getElementById('save-edit-btn');
   btn.disabled = true; btn.innerHTML = 'جاري الحفظ... <span class="spinner"></span>';
+  const activeTab = document.querySelector('#edit-modal .img-tab.active').textContent.includes('رفع') ? 'upload' : 'url';
+  const imgUrl = activeTab === 'upload' ? '' : document.getElementById('edit-img-url').value.trim();
   const updates = { name_ar: name, original_price: pOld, discounted_price: pNew, category: cat, description: desc, product_url: productUrl || null };
-  if (imgUrl) updates.images = [imgUrl];
+  if (editUploadedImageUrls.length > 0) updates.images = editUploadedImageUrls;
+  else if (imgUrl) updates.images = [imgUrl];
   const { error } = await sb.from('products').update(updates).eq('id', editingProductId);
   btn.disabled = false; btn.innerHTML = 'حفظ التعديلات ✓';
   if (error) { showToast('❌ ' + error.message); return; }
@@ -1188,7 +1234,25 @@ window.showToast=showToast;
       </div>
       <div class="form-group"><label class="form-label">وصف مختصر</label><input class="form-input" id="edit-desc" placeholder="وصف العرض"></div>
     </div>
-    <div class="form-group"><label class="form-label">رابط الصورة (اختياري)</label><input class="form-input" id="edit-img-url" placeholder="https://..."></div>
+    <div class="form-group"><label class="form-label">صور المنتج</label>
+      <div class="img-tabs">
+        <button class="img-tab active" onclick="switchImgTab(this,'edit-upload')">📁 رفع صورة</button>
+        <button class="img-tab" onclick="switchImgTab(this,'edit-url')">🔗 رابط URL</button>
+      </div>
+      <div id="tab-edit-upload" style="display:block">
+        <div class="upload-area" id="edit-upload-area" ondragover="event.preventDefault()" ondrop="handleEditFileDrop(event)">
+          <input type="file" class="upload-input" id="edit-img-file-input" accept="image/*" onchange="handleEditFileUpload(this.files)">
+          <div class="upload-icon">📷</div>
+          <div class="upload-text">اسحب الصور هنا أو اضغط للاختيار</div>
+          <div class="upload-sub">JPG, PNG, WEBP — حجم أقصى 5MB للصورة</div>
+        </div>
+        <div class="upload-progress" id="edit-upload-progress" style="display:none;"></div>
+        <div class="uploaded-imgs" id="edit-uploaded-imgs"></div>
+      </div>
+      <div id="tab-edit-url" style="display:none">
+        <input class="form-input" id="edit-img-url" placeholder="https://...">
+      </div>
+    </div>
     <div class="form-group"><label class="form-label">رابط المنتج (اختياري)</label><input class="form-input" id="edit-product-url" placeholder="https://..."></div>
     <div class="modal-actions">
       <button class="btn-outline" onclick="closeEditDeal()">إلغاء</button>
