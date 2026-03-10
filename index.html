@@ -259,6 +259,8 @@ button,input,select,textarea{font-family:"Cairo",sans-serif;}a{text-decoration:n
 .ddeal-actions{display:flex;gap:6px;}
 .icon-btn{background:none;border:1.5px solid var(--border);width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;transition:all .2s;}
 .icon-btn.del:hover{border-color:var(--red);background:var(--redP);}
+.icon-btn.edit{border-color:#f59e0b;}
+.icon-btn.edit:hover{border-color:#f59e0b;background:#fef3c7;}
 .docc-empty{text-align:center;padding:20px;font-size:13px;color:var(--dim);}
 .dash-side{display:flex;flex-direction:column;gap:16px;}
 .side-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);}
@@ -818,7 +820,7 @@ async function loadProducts(){
   ["deals-occ-eid","deals-occ-taasis","deals-occ-ramadan","deals-occ-national"].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="docc-empty">لا توجد عروض بعد</div>';});
   products.forEach(p=>{
     const disc=Math.round((1-p.discounted_price/p.original_price)*100);
-    const html=`<div class="ddeal-row" id="product-${p.id}"><span style="font-size:20px">🛋️</span><div class="ddeal-info"><div class="ddeal-name">${p.name_ar}</div><div class="ddeal-price">السعر: <strong>${p.discounted_price.toLocaleString("ar-SA")} ر.س</strong> · الأصلي: ${p.original_price.toLocaleString("ar-SA")} ر.س</div></div><span class="ddeal-disc">-${disc}٪</span><div class="ddeal-actions"><button class="icon-btn del" onclick="deleteProduct('${p.id}')">🗑️</button></div></div>`;
+    const html=`<div class="ddeal-row" id="product-${p.id}"><span style="font-size:20px">🛋️</span><div class="ddeal-info"><div class="ddeal-name">${p.name_ar}</div><div class="ddeal-price">السعر: <strong>${p.discounted_price.toLocaleString("ar-SA")} ر.س</strong> · الأصلي: ${p.original_price.toLocaleString("ar-SA")} ر.س</div></div><span class="ddeal-disc">-${disc}٪</span><div class="ddeal-actions"><button class="icon-btn edit" onclick="openEditDeal('${p.id}')">✏️</button><button class="icon-btn del" onclick="deleteProduct('${p.id}')">🗑️</button></div></div>`;
     const c=document.getElementById("deals-occ-eid");if(c){const e=c.querySelector(".docc-empty");if(e)e.remove();c.insertAdjacentHTML("beforeend",html);}
   });
 }
@@ -1106,9 +1108,94 @@ document.addEventListener('keydown', e => {
 });
 window.openLightbox = openLightbox;
 
+
+// ═══════════════════════════════════════
+// EDIT DEAL
+// ═══════════════════════════════════════
+let editingProductId = null;
+
+async function openEditDeal(productId) {
+  const { data, error } = await sb.from('products').select('*').eq('id', productId).single();
+  if (error || !data) { showToast('❌ تعذر تحميل بيانات العرض'); return; }
+  editingProductId = productId;
+  document.getElementById('edit-name').value = data.name_ar || '';
+  document.getElementById('edit-price-old').value = data.original_price || '';
+  document.getElementById('edit-price-new').value = data.discounted_price || '';
+  document.getElementById('edit-cat').value = data.category || 'living_room';
+  document.getElementById('edit-desc').value = data.description || '';
+  document.getElementById('edit-img-url').value = (data.images && data.images[0]) || '';
+  document.getElementById('edit-product-url').value = data.product_url || '';
+  const m = document.getElementById('edit-modal');
+  m.style.display = 'flex';
+  setTimeout(() => m.classList.add('open'), 10);
+}
+
+function closeEditDeal() {
+  const m = document.getElementById('edit-modal');
+  m.classList.remove('open');
+  setTimeout(() => { m.style.display = 'none'; }, 300);
+  editingProductId = null;
+}
+
+async function saveEditDeal() {
+  if (!editingProductId) return;
+  const name = document.getElementById('edit-name').value.trim();
+  const pOld = parseFloat(document.getElementById('edit-price-old').value);
+  const pNew = parseFloat(document.getElementById('edit-price-new').value);
+  const cat = document.getElementById('edit-cat').value;
+  const desc = document.getElementById('edit-desc').value.trim();
+  const imgUrl = document.getElementById('edit-img-url').value.trim();
+  const productUrl = document.getElementById('edit-product-url').value.trim();
+  if (!name || !pOld || !pNew) { showToast('⚠️ أدخل اسم المنتج والسعرين'); return; }
+  const btn = document.getElementById('save-edit-btn');
+  btn.disabled = true; btn.innerHTML = 'جاري الحفظ... <span class="spinner"></span>';
+  const updates = { name_ar: name, original_price: pOld, discounted_price: pNew, category: cat, description: desc, product_url: productUrl || null };
+  if (imgUrl) updates.images = [imgUrl];
+  const { error } = await sb.from('products').update(updates).eq('id', editingProductId);
+  btn.disabled = false; btn.innerHTML = 'حفظ التعديلات ✓';
+  if (error) { showToast('❌ ' + error.message); return; }
+  showToast('✅ تم تعديل العرض بنجاح');
+  closeEditDeal();
+  loadOccasions();
+}
+
+window.openEditDeal = openEditDeal;
+window.closeEditDeal = closeEditDeal;
+window.saveEditDeal = saveEditDeal;
+
 function showToast(msg){const t=document.getElementById("toastEl");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800);}
 window.showToast=showToast;
 </script>
+<!-- Edit Deal Modal -->
+<div class="modal-overlay" id="edit-modal" style="display:none;align-items:center;justify-content:center;">
+  <div class="modal" style="max-width:480px;width:95%;">
+    <button class="modal-close" onclick="closeEditDeal()">✕</button>
+    <div class="modal-title">تعديل العرض ✏️</div>
+    <div class="form-group"><label class="form-label">اسم المنتج / العرض</label><input class="form-input" id="edit-name" placeholder="مثال: طقم كنب مودرن"></div>
+    <div class="form-row grid">
+      <div class="form-group"><label class="form-label">السعر الأصلي (ر.س)</label><input class="form-input" id="edit-price-old" type="number" placeholder="6000"></div>
+      <div class="form-group"><label class="form-label">سعر العرض (ر.س)</label><input class="form-input" id="edit-price-new" type="number" placeholder="3000"></div>
+    </div>
+    <div class="form-row grid">
+      <div class="form-group"><label class="form-label">الفئة</label>
+        <select class="form-input" id="edit-cat">
+          <option value="living_room">كنب وجلسات</option>
+          <option value="bedroom">غرف نوم</option>
+          <option value="office">طاولات ومكاتب</option>
+          <option value="decor">ديكور منزلي</option>
+          <option value="mixed">متنوع</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">وصف مختصر</label><input class="form-input" id="edit-desc" placeholder="وصف العرض"></div>
+    </div>
+    <div class="form-group"><label class="form-label">رابط الصورة (اختياري)</label><input class="form-input" id="edit-img-url" placeholder="https://..."></div>
+    <div class="form-group"><label class="form-label">رابط المنتج (اختياري)</label><input class="form-input" id="edit-product-url" placeholder="https://..."></div>
+    <div class="modal-actions">
+      <button class="btn-outline" onclick="closeEditDeal()">إلغاء</button>
+      <button class="btn-primary" id="save-edit-btn" onclick="saveEditDeal()">حفظ التعديلات ✓</button>
+    </div>
+  </div>
+</div>
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
