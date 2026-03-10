@@ -862,7 +862,8 @@ function openProductDetail(product,store){
   const saved=(product.original_price-product.discounted_price).toLocaleString("ar-SA");
   const em={living_room:"🛋️",bedroom:"🛏️",office:"🪑",decor:"🪴",mixed:"🛋️"};
   const emoji=em[product.category]||"🛋️";
-  let galleryHTML=gImgs.length>0?gImgs.map((u,idx)=>`<div class="detail-gallery-img"><img src="${u}" alt="${product.name_ar}" onclick="openLightbox(${JSON.stringify(gImgs)},${idx})" onerror="this.style.display='none'"></div>`).join(""):`<div class="detail-gallery-img">${emoji}</div>`;
+  window._currentGalleryImgs = gImgs;
+  let galleryHTML=gImgs.length>0?gImgs.map((u,idx)=>`<div class="detail-gallery-img"><img src="${u}" alt="${product.name_ar}" onclick="openLightbox(window._currentGalleryImgs,${idx})" style="cursor:zoom-in" onerror="this.style.display='none'"></div>`).join(""):`<div class="detail-gallery-img">${emoji}</div>`;
   const showNav=gImgs.length>1;
   const dots=showNav?gImgs.map((_,i)=>`<div class="gallery-dot${i===0?" active":""}"></div>`).join(""):"";
   const sn=store?.name_ar||"المتجر";
