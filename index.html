@@ -1187,16 +1187,15 @@ async function saveEditDeal() {
   const pNew = parseFloat(document.getElementById('edit-price-new').value);
   const cat = document.getElementById('edit-cat').value;
   const desc = document.getElementById('edit-desc').value.trim();
-  const imgUrl = document.getElementById('edit-img-url').value.trim();
   const productUrl = document.getElementById('edit-product-url').value.trim();
   if (!name || !pOld || !pNew) { showToast('⚠️ أدخل اسم المنتج والسعرين'); return; }
   const btn = document.getElementById('save-edit-btn');
   btn.disabled = true; btn.innerHTML = 'جاري الحفظ... <span class="spinner"></span>';
   const activeTab = document.querySelector('#edit-modal .img-tab.active').textContent.includes('رفع') ? 'upload' : 'url';
-  const imgUrl = activeTab === 'upload' ? '' : document.getElementById('edit-img-url').value.trim();
+  const editImgUrl = activeTab === 'upload' ? '' : document.getElementById('edit-img-url').value.trim();
   const updates = { name_ar: name, original_price: pOld, discounted_price: pNew, category: cat, description: desc, product_url: productUrl || null };
   if (editUploadedImageUrls.length > 0) updates.images = editUploadedImageUrls;
-  else if (imgUrl) updates.images = [imgUrl];
+  else if (editImgUrl) updates.images = [editImgUrl];
   const { error } = await sb.from('products').update(updates).eq('id', editingProductId);
   btn.disabled = false; btn.innerHTML = 'حفظ التعديلات ✓';
   if (error) { showToast('❌ ' + error.message); return; }
