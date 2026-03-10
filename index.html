@@ -1021,11 +1021,13 @@ async function handleFileUpload(files) {
     console.log('Uploaded URL:', publicUrl);
     
     uploadedImageUrls.push(publicUrl);
+    console.log('Uploaded URL:', publicUrl);
     
-    // عرض الصورة
+    // عرض الصورة محلياً كـ blob
+    const localUrl = URL.createObjectURL(file);
     const wrap = document.createElement('div');
     wrap.className = 'uploaded-img-wrap';
-    wrap.innerHTML = `<img src="${publicUrl}" class="uploaded-img"><button class="uploaded-img-rm" onclick="removeUploadedImg(this,'${publicUrl}')">✕</button>`;
+    wrap.innerHTML = `<img src="${localUrl}" class="uploaded-img"><button class="uploaded-img-rm" onclick="removeUploadedImg(this,'${publicUrl}')">✕</button>`;
     document.getElementById('uploaded-imgs').appendChild(wrap);
   }
   
