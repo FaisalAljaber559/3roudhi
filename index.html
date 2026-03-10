@@ -736,7 +736,7 @@ function renderDeals(products){
     const big=i===0;
     const hot=disc>=40;
     const hasImg=p.images&&p.images.length>0;
-    const thumbContent=hasImg?`<img src="${p.images[0]}" alt="${p.name_ar}" referrerpolicy="no-referrer" crossorigin="anonymous" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.remove()"><span style="font-size:${big?68:52}px;position:relative;z-index:0">${emoji}</span>`:`<span style="font-size:${big?68:52}px">${emoji}</span>`;
+    const thumbContent=hasImg?`<img src="${p.images[0]}" alt="${p.name_ar}" referrerpolicy="no-referrer" crossorigin="anonymous" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.remove()">`:`<span style="font-size:${big?68:52}px">${emoji}</span>`;
     grid.insertAdjacentHTML("beforeend",`
       <div class="deal-card${big?" big":""}" onclick="openProductDetail(pCache['${p.id}'].product,pCache['${p.id}'].store)">
         <div class="dc-thumb" style="background:linear-gradient(135deg,#f8fafc,#f1f5f9);position:relative">
