@@ -321,6 +321,11 @@ button,input,select,textarea{font-family:"Cairo",sans-serif;}a{text-decoration:n
 .lightbox-prev{left:20px;}
 .lightbox-next{right:20px;}
 .lightbox-counter{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.7);font-size:13px;}
+/* FLOATING CONTACT BUTTON */
+.float-contact-btn{position:fixed;bottom:24px;right:24px;z-index:1000;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:14px 20px;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(249,115,22,0.4);display:flex;align-items:center;gap:8px;transition:all .3s;font-family:'Cairo',sans-serif;}
+.float-contact-btn:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(249,115,22,0.5);}
+.float-contact-label{font-size:14px;font-weight:700;white-space:nowrap;}
+@media(max-width:480px){.float-contact-label{display:none;}.float-contact-btn{padding:14px;}}
 .gallery-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.92);border:1px solid var(--border);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:all .2s;z-index:2;box-shadow:var(--shadow);}
 .gallery-nav:hover{background:#fff;box-shadow:var(--shadowM);}
 .gallery-prev{right:12px;}.gallery-next{left:12px;}
@@ -671,6 +676,36 @@ button,input,select,textarea{font-family:"Cairo",sans-serif;}a{text-decoration:n
 </div>
 <div class="toast" id="toastEl"></div>
 
+<!-- زر التواصل العائم -->
+<button class="float-contact-btn" id="float-contact-btn" onclick="openContactModal()" title="تواصل معنا">
+  💬
+  <span class="float-contact-label">تواصل معنا</span>
+</button>
+
+<!-- نموذج التواصل -->
+<div class="modal-overlay" id="contact-modal" style="display:none;align-items:center;justify-content:center;">
+  <div class="modal" style="max-width:460px;width:95%;">
+    <button class="modal-close" onclick="closeContactModal()">✕</button>
+    <div class="modal-title">تواصل مع عُروضي 💬</div>
+    <p style="text-align:center;color:var(--dim);font-size:14px;margin-bottom:20px">نرد على رسائلك خلال 24 ساعة</p>
+    <div class="form-group"><label class="form-label">الاسم</label><input class="form-input" id="contact-name" placeholder="اسمك الكريم"></div>
+    <div class="form-group"><label class="form-label">البريد الإلكتروني أو الواتساب</label><input class="form-input" id="contact-email" placeholder="للتواصل معك"></div>
+    <div class="form-group"><label class="form-label">نوع الاستفسار</label>
+      <select class="form-input" id="contact-type">
+        <option value="merchant">أريد تسجيل متجري في المنصة</option>
+        <option value="support">مشكلة تقنية</option>
+        <option value="general">استفسار عام</option>
+        <option value="other">أخرى</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">رسالتك</label><textarea class="form-input" id="contact-msg" rows="4" placeholder="اكتب رسالتك هنا..." style="resize:vertical;min-height:100px"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn-outline" onclick="closeContactModal()">إلغاء</button>
+      <button class="btn-primary" id="contact-send-btn" onclick="sendContactMsg()">إرسال الرسالة ✉️</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const SUPABASE_URL="https://avigdujywxlgahoakdvj.supabase.co";
 const SUPABASE_ANON="sb_publishable_O8PBOziG71unQ917IG30sw_7iQHwugv";
@@ -704,7 +739,10 @@ window.addEventListener("DOMContentLoaded",async()=>{
   sb=createClient(SUPABASE_URL,SUPABASE_ANON);
   const{data:{session}}=await sb.auth.getSession();
   if(session){await loadDashboard(session.user);showPage("dashboard");}
-  else{await loadPublicDeals();await loadStores();await loadStats();}
+  else{await loadPublicDeals();await loadStores();await loadStats();
+    // فتح صفحة التسجيل تلقائياً إذا كان الرابط يحتوي ?register=true
+    if(new URLSearchParams(window.location.search).get('register')==='true') showPage('login');
+  }
   document.getElementById("login-pass").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});
   document.getElementById("detail-overlay").addEventListener("click",function(e){if(e.target===this)closeProductDetail();});
 });
@@ -1207,6 +1245,57 @@ async function saveEditDeal() {
 window.openEditDeal = openEditDeal;
 window.closeEditDeal = closeEditDeal;
 window.saveEditDeal = saveEditDeal;
+
+
+// ═══════════════════════════════════════
+// CONTACT MODAL
+// ═══════════════════════════════════════
+function openContactModal() {
+  const m = document.getElementById('contact-modal');
+  m.style.display = 'flex';
+  setTimeout(() => m.classList.add('open'), 10);
+}
+
+function closeContactModal() {
+  const m = document.getElementById('contact-modal');
+  m.classList.remove('open');
+  setTimeout(() => { m.style.display = 'none'; }, 300);
+}
+
+async function sendContactMsg() {
+  const name = document.getElementById('contact-name').value.trim();
+  const email = document.getElementById('contact-email').value.trim();
+  const type = document.getElementById('contact-type').value;
+  const msg = document.getElementById('contact-msg').value.trim();
+  if (!name || !email || !msg) { showToast('⚠️ يرجى تعبئة جميع الحقول'); return; }
+  const btn = document.getElementById('contact-send-btn');
+  btn.disabled = true; btn.innerHTML = 'جاري الإرسال... <span class="spinner"></span>';
+  
+  // حفظ الرسالة في Supabase
+  const typeLabels = { merchant: 'تسجيل متجر', support: 'مشكلة تقنية', general: 'استفسار عام', other: 'أخرى' };
+  const { error } = await sb.from('contact_messages').insert({
+    name, contact: email, type, type_label: typeLabels[type], message: msg
+  });
+  
+  btn.disabled = false; btn.innerHTML = 'إرسال الرسالة ✉️';
+  if (error) {
+    // إذا الجدول غير موجود، نرسل عبر واتساب كبديل
+    const waText = encodeURIComponent(`*رسالة من عُروضي*\nالاسم: ${name}\nالتواصل: ${email}\nالنوع: ${typeLabels[type]}\nالرسالة: ${msg}`);
+    window.open(`https://wa.me/966XXXXXXXXX?text=${waText}`, '_blank');
+    showToast('✅ سيتم تحويلك للواتساب');
+    closeContactModal();
+    return;
+  }
+  showToast('✅ تم إرسال رسالتك بنجاح! سنتواصل معك قريباً');
+  document.getElementById('contact-name').value = '';
+  document.getElementById('contact-email').value = '';
+  document.getElementById('contact-msg').value = '';
+  closeContactModal();
+}
+
+window.openContactModal = openContactModal;
+window.closeContactModal = closeContactModal;
+window.sendContactMsg = sendContactMsg;
 
 function showToast(msg){const t=document.getElementById("toastEl");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800);}
 window.showToast=showToast;
