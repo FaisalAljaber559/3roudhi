@@ -570,7 +570,30 @@ button,input,select,textarea{font-family:"Cairo",sans-serif;}a{text-decoration:n
     <div class="form-group"><label class="form-label">البريد الإلكتروني</label><div class="input-wrap"><span class="input-icon">✉️</span><input class="form-input" style="padding-right:44px" type="email" placeholder="store@3roudhi.com" id="login-email"></div></div>
     <div class="form-group"><label class="form-label">كلمة المرور</label><div class="input-wrap"><span class="input-icon">🔒</span><input class="form-input" style="padding-right:44px" type="password" placeholder="••••••••" id="login-pass"><button class="eye-btn" onclick="togglePass()" id="eye-btn">👁️</button></div></div>
     <button class="login-btn" onclick="doLogin()" id="login-submit-btn">تسجيل الدخول</button>
-    <div class="login-hint">ليس لديك حساب؟ <a href="#" onclick="showToast('📩 سيتواصل معك فريقنا!')">تواصل معنا للتسجيل</a></div>
+    <div class="login-hint">ليس لديك حساب؟ <a href="#" onclick="showSignupForm()">سجّل متجرك الآن</a></div>
+  </div>
+</div>
+
+<!-- Signup Modal -->
+<div class="modal-overlay" id="signup-modal" style="display:none;align-items:center;justify-content:center;">
+  <div class="modal" style="max-width:480px;width:95%;">
+    <button class="modal-close" onclick="closeSignupForm()">✕</button>
+    <div class="modal-title">🏪 تسجيل متجر جديد</div>
+    <p style="text-align:center;color:var(--dim);font-size:13px;margin-bottom:20px">أنشئ حسابك مجاناً وابدأ في نشر عروضك</p>
+    <div class="form-row grid">
+      <div class="form-group"><label class="form-label">البريد الإلكتروني *</label><input class="form-input" id="signup-email" type="email" placeholder="store@example.com"></div>
+      <div class="form-group"><label class="form-label">كلمة المرور *</label><input class="form-input" id="signup-password" type="password" placeholder="••••••••"></div>
+    </div>
+    <div class="form-group"><label class="form-label">اسم المتجر *</label><input class="form-input" id="signup-store-name" placeholder="مثال: هوم سنتر الرياض"></div>
+    <div class="form-row grid">
+      <div class="form-group"><label class="form-label">رقم الهاتف</label><input class="form-input" id="signup-phone" type="tel" placeholder="05xxxxxxxx"></div>
+      <div class="form-group"><label class="form-label">واتساب</label><input class="form-input" id="signup-whatsapp" type="tel" placeholder="05xxxxxxxx"></div>
+    </div>
+    <div class="form-group"><label class="form-label">العنوان / الحي</label><input class="form-input" id="signup-address" placeholder="مثال: حي النرجس، الرياض"></div>
+    <div class="modal-actions">
+      <button class="btn-outline" onclick="closeSignupForm()">إلغاء</button>
+      <button class="btn-primary" id="signup-submit-btn" onclick="doSignup()">إنشاء الحساب ✓</button>
+    </div>
   </div>
 </div>
 
@@ -1296,6 +1319,69 @@ async function sendContactMsg() {
 window.openContactModal = openContactModal;
 window.closeContactModal = closeContactModal;
 window.sendContactMsg = sendContactMsg;
+
+
+// ═══════════════════════════════════════
+// SIGNUP
+// ═══════════════════════════════════════
+function showSignupForm() {
+  const m = document.getElementById('signup-modal');
+  m.style.display = 'flex';
+  setTimeout(() => m.classList.add('open'), 10);
+}
+
+function closeSignupForm() {
+  const m = document.getElementById('signup-modal');
+  m.classList.remove('open');
+  setTimeout(() => { m.style.display = 'none'; }, 300);
+}
+
+async function doSignup() {
+  const email = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value;
+  const storeName = document.getElementById('signup-store-name').value.trim();
+  const phone = document.getElementById('signup-phone').value.trim();
+  const whatsapp = document.getElementById('signup-whatsapp').value.trim();
+  const address = document.getElementById('signup-address').value.trim();
+
+  if (!email || !password || !storeName) { showToast('⚠️ يرجى تعبئة البريد وكلمة المرور واسم المتجر'); return; }
+  if (password.length < 6) { showToast('⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل'); return; }
+
+  const btn = document.getElementById('signup-submit-btn');
+  btn.disabled = true; btn.innerHTML = 'جاري التسجيل... <span class="spinner"></span>';
+
+  const { data, error } = await sb.auth.signUp({ email, password });
+
+  if (error) {
+    btn.disabled = false; btn.innerHTML = 'إنشاء الحساب ✓';
+    showToast('❌ ' + (error.message === 'User already registered' ? 'البريد مسجل مسبقاً' : error.message));
+    return;
+  }
+
+  // Create store record
+  if (data.user) {
+    await sb.from('stores').insert({
+      id: data.user.id,
+      name_ar: storeName,
+      phone: phone || null,
+      whatsapp: whatsapp || null,
+      address: address || null,
+      city: 'الرياض'
+    });
+    await sb.from('profiles').insert({
+      id: data.user.id,
+      role: 'merchant'
+    });
+  }
+
+  btn.disabled = false; btn.innerHTML = 'إنشاء الحساب ✓';
+  closeSignupForm();
+  showToast('🎉 تم إنشاء حسابك بنجاح! يمكنك تسجيل الدخول الآن');
+}
+
+window.showSignupForm = showSignupForm;
+window.closeSignupForm = closeSignupForm;
+window.doSignup = doSignup;
 
 function showToast(msg){const t=document.getElementById("toastEl");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800);}
 window.showToast=showToast;
