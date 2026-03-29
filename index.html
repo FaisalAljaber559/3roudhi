@@ -56,49 +56,31 @@ button,input,select,textarea{font-family:"Cairo",sans-serif;}a{text-decoration:n
 .stat-num{font-family:"Tajawal",sans-serif;font-size:28px;font-weight:900;color:var(--orange);}
 .stat-lbl{font-size:12px;color:var(--muted);font-weight:600;margin-top:2px;}
 .hero-visual{flex-shrink:0;width:420px;}
-.promo-banner{
-  width:420px;height:320px;
+/* MERCHANT CARD */
+.merchant-card{
+  width:300px;
   background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
-  border-radius:20px;overflow:hidden;position:relative;
-  box-shadow:0 20px 60px rgba(0,0,0,0.2);
+  border-radius:20px;padding:24px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.25);
   animation:float 4s ease-in-out infinite;
+  border:1px solid rgba(249,115,22,0.2);
 }
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-.promo-bg-circle{position:absolute;border-radius:50%;background:rgba(255,122,0,0.12);}
-.promo-bg-circle:nth-child(1){width:300px;height:300px;top:-80px;left:-80px;}
-.promo-bg-circle:nth-child(2){width:200px;height:200px;bottom:-60px;right:-40px;background:rgba(255,255,255,0.04);}
-.promo-content{position:relative;z-index:2;padding:28px 28px 20px;height:100%;display:flex;flex-direction:column;justify-content:space-between;}
-.promo-ending{
-  display:inline-flex;align-items:center;gap:6px;
-  background:var(--red);color:#fff;
-  padding:5px 12px;border-radius:100px;
-  font-size:11px;font-weight:800;width:fit-content;
-  animation:pulse 2s infinite;
-}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.4);}70%{box-shadow:0 0 0 8px rgba(239,68,68,0);}}
-.promo-mid{}
-.promo-occasion{font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);margin-bottom:4px;letter-spacing:1px;}
-.promo-title{font-family:"Tajawal",sans-serif;font-size:22px;font-weight:900;color:#fff;line-height:1.3;margin-bottom:12px;}
-.promo-disc-row{display:flex;align-items:center;gap:10px;}
-.promo-disc-big{
-  font-family:"Tajawal",sans-serif;font-size:52px;font-weight:900;
-  color:var(--orange);line-height:1;
-}
-.promo-disc-sub{display:flex;flex-direction:column;}
-.promo-disc-off{font-size:18px;font-weight:800;color:#fff;}
-.promo-disc-note{font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px;}
-.promo-items{display:flex;gap:8px;flex-wrap:wrap;}
-.promo-item{
-  display:flex;align-items:center;gap:5px;
-  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);
-  padding:5px 10px;border-radius:20px;
-  font-size:11px;font-weight:600;color:rgba(255,255,255,0.8);
-}
-.promo-sofa{
-  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
-  font-size:72px;opacity:0.12;z-index:1;
-  filter:blur(1px);
-}
+.merchant-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.merchant-card-badge{background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.3);color:#fb923c;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;}
+.merchant-card-free{background:#f97316;color:#fff;font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px;}
+.merchant-card-title{font-size:22px;font-weight:900;color:#fff;line-height:1.3;margin-bottom:8px;}
+.merchant-card-sub{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;margin-bottom:16px;}
+.merchant-card-points{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+.merchant-point{display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(255,255,255,0.85);font-weight:600;}
+.mp-check{color:#4ade80;font-size:14px;font-weight:900;}
+.merchant-urgency{background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.25);border-radius:8px;padding:8px 12px;color:#fb923c;font-size:11px;font-weight:700;margin-bottom:14px;text-align:center;}
+.merchant-cta{background:linear-gradient(135deg,#f97316,#ea6b0a);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Cairo',sans-serif;width:100%;transition:.2s;box-shadow:0 4px 16px rgba(249,115,22,0.4);margin-bottom:12px;}
+.merchant-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(249,115,22,0.5);}
+.merchant-steps{display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;}
+.merchant-steps span{font-size:11px;color:rgba(255,255,255,0.5);font-weight:600;}
+.ms-arrow{color:#f97316;font-size:12px;}
+@media(max-width:900px){.merchant-card{width:100%;animation:none;}}
 
 /* OCCASIONS */
 .occasions-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 40px;position:sticky;top:64px;z-index:200;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
@@ -326,6 +308,30 @@ button,input,select,textarea{font-family:"Cairo",sans-serif;}a{text-decoration:n
 .float-contact-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(249,115,22,0.45);}
 .float-contact-label{font-size:13px;font-weight:700;white-space:nowrap;}
 @media(max-width:480px){.float-contact-label{display:none;}.float-contact-btn{padding:10px;}}
+/* ═══════════════════════════════════════
+   LANDING — COMPACT MERCHANT STRIP
+═══════════════════════════════════════ */
+.lp-merchant-strip{padding:40px 20px;background:linear-gradient(135deg,#fff7ed,#fff);}
+.lp-container{max-width:960px;margin:0 auto;}
+.lp-strip-inner{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;}
+@media(max-width:700px){.lp-strip-inner{grid-template-columns:1fr;}}
+.lp-badge{display:inline-block;background:#fff7ed;color:var(--primary);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;border:1px solid #fed7aa;margin-bottom:12px;}
+.lp-strip-title{font-size:clamp(18px,3vw,26px);font-weight:900;color:var(--text);line-height:1.3;margin-bottom:14px;}
+.lp-highlight{color:var(--primary);}
+.lp-strip-points{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.lp-strip-points span{font-size:12.5px;color:var(--dim);background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-weight:600;}
+.lp-strip-steps{display:flex;align-items:center;flex-wrap:wrap;gap:6px;}
+.lp-mini-step{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--text);}
+.lp-mini-num{width:22px;height:22px;background:var(--primary);color:#fff;border-radius:50%;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lp-mini-arrow{color:var(--primary);font-size:16px;}
+.lp-strip-cta{background:linear-gradient(135deg,#1a1a2e,#0f3460);border-radius:20px;padding:24px 22px;text-align:center;min-width:220px;}
+.lp-offer-pills{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.lp-pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:7px 14px;color:#fff;font-size:13px;font-weight:600;}
+.lp-urgency-small{background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.3);border-radius:8px;padding:8px 12px;color:#fb923c;font-size:11.5px;font-weight:700;margin-bottom:14px;}
+.lp-cta-btn-solid{background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px 24px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Cairo',sans-serif;width:100%;transition:.2s;box-shadow:0 4px 16px rgba(249,115,22,.4);}
+.lp-cta-btn-solid:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(249,115,22,.5);}
+.lp-note{font-size:11px;color:rgba(255,255,255,.5);margin-top:8px;}
+
 .gallery-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.92);border:1px solid var(--border);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:all .2s;z-index:2;box-shadow:var(--shadow);}
 .gallery-nav:hover{background:#fff;box-shadow:var(--shadowM);}
 .gallery-prev{right:12px;}.gallery-next{left:12px;}
@@ -453,39 +459,32 @@ button,input,select,textarea{font-family:"Cairo",sans-serif;}a{text-decoration:n
         </div>
       </div>
       <div class="hero-visual">
-        <div class="promo-banner">
-          <div class="promo-bg-circle"></div>
-          <div class="promo-bg-circle"></div>
-          <div class="promo-sofa">🛋️</div>
-          <div class="promo-content">
-            <div class="promo-ending">
-              <span style="width:7px;height:7px;border-radius:50%;background:#fff;display:inline-block"></span>
-              ينتهي مع عيد الفطر
-            </div>
-            <div class="promo-mid">
-              <div class="promo-occasion">تخفيضات عيد الفطر ١٤٤٧</div>
-              <div class="promo-title">خصومات استثنائية<br>على الأثاث الفاخر</div>
-              <div class="promo-disc-row">
-                <div class="promo-disc-big">٧٠</div>
-                <div class="promo-disc-sub">
-                  <span class="promo-disc-off">٪ خصم</span>
-                  <span class="promo-disc-note">على منتجات مختارة</span>
-                </div>
-              </div>
-            </div>
-            <div class="promo-items">
-              <div class="promo-item">🛋️ كنب</div>
-              <div class="promo-item">🛏️ غرف نوم</div>
-              <div class="promo-item">🪑 طاولات</div>
-              <div class="promo-item">🪴 ديكور</div>
-            </div>
+        <div class="merchant-card">
+          <div class="merchant-card-top">
+            <div class="merchant-card-badge">🏪 لأصحاب المتاجر</div>
+            <div class="merchant-card-free">مجاني ١٠٠٪</div>
+          </div>
+          <div class="merchant-card-title">وصّل عروضك<br>لآلاف العملاء</div>
+          <div class="merchant-card-sub">انضم الآن كشريك مؤسس واستفد من الظهور المجاني في مرحلة الإطلاق</div>
+          <div class="merchant-card-points">
+            <div class="merchant-point"><span class="mp-check">✓</span> زيادة المبيعات بدون إعلانات</div>
+            <div class="merchant-point"><span class="mp-check">✓</span> جمهور جاهز للشراء</div>
+            <div class="merchant-point"><span class="mp-check">✓</span> بدون عمولات أو التزامات</div>
+            <div class="merchant-point"><span class="mp-check">✓</span> إلغاء بسهولة في أي وقت</div>
+          </div>
+          <div class="merchant-urgency">⏰ مقاعد محدودة — مرحلة الإطلاق</div>
+          <button class="merchant-cta" onclick="showSignupForm()">سجّل متجرك الآن ←</button>
+          <div class="merchant-steps">
+            <span>١ سجّل</span><span class="ms-arrow">←</span>
+            <span>٢ أضف عروضك</span><span class="ms-arrow">←</span>
+            <span>٣ مبيعات أكثر 🎉</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="occasions-bar" id="occasions">
+    <div class="occasions-bar" id="occasions">
     <div class="occ-tabs">
       <div class="occ-tab active" onclick="setOccTab(this)"><span class="dot"></span> الكل</div>
       <div class="occ-tab" onclick="setOccTab(this)"><span class="dot"></span> عيد الفطر 🎊 <span class="badge">نشط</span></div>
@@ -570,30 +569,7 @@ button,input,select,textarea{font-family:"Cairo",sans-serif;}a{text-decoration:n
     <div class="form-group"><label class="form-label">البريد الإلكتروني</label><div class="input-wrap"><span class="input-icon">✉️</span><input class="form-input" style="padding-right:44px" type="email" placeholder="store@3roudhi.com" id="login-email"></div></div>
     <div class="form-group"><label class="form-label">كلمة المرور</label><div class="input-wrap"><span class="input-icon">🔒</span><input class="form-input" style="padding-right:44px" type="password" placeholder="••••••••" id="login-pass"><button class="eye-btn" onclick="togglePass()" id="eye-btn">👁️</button></div></div>
     <button class="login-btn" onclick="doLogin()" id="login-submit-btn">تسجيل الدخول</button>
-    <div class="login-hint">ليس لديك حساب؟ <a href="#" onclick="showSignupForm()">سجّل متجرك الآن</a></div>
-  </div>
-</div>
-
-<!-- Signup Modal -->
-<div class="modal-overlay" id="signup-modal" style="display:none;align-items:center;justify-content:center;">
-  <div class="modal" style="max-width:480px;width:95%;">
-    <button class="modal-close" onclick="closeSignupForm()">✕</button>
-    <div class="modal-title">🏪 تسجيل متجر جديد</div>
-    <p style="text-align:center;color:var(--dim);font-size:13px;margin-bottom:20px">أنشئ حسابك مجاناً وابدأ في نشر عروضك</p>
-    <div class="form-row grid">
-      <div class="form-group"><label class="form-label">البريد الإلكتروني *</label><input class="form-input" id="signup-email" type="email" placeholder="store@example.com"></div>
-      <div class="form-group"><label class="form-label">كلمة المرور *</label><input class="form-input" id="signup-password" type="password" placeholder="••••••••"></div>
-    </div>
-    <div class="form-group"><label class="form-label">اسم المتجر *</label><input class="form-input" id="signup-store-name" placeholder="مثال: هوم سنتر الرياض"></div>
-    <div class="form-row grid">
-      <div class="form-group"><label class="form-label">رقم الهاتف</label><input class="form-input" id="signup-phone" type="tel" placeholder="05xxxxxxxx"></div>
-      <div class="form-group"><label class="form-label">واتساب</label><input class="form-input" id="signup-whatsapp" type="tel" placeholder="05xxxxxxxx"></div>
-    </div>
-    <div class="form-group"><label class="form-label">العنوان / الحي</label><input class="form-input" id="signup-address" placeholder="مثال: حي النرجس، الرياض"></div>
-    <div class="modal-actions">
-      <button class="btn-outline" onclick="closeSignupForm()">إلغاء</button>
-      <button class="btn-primary" id="signup-submit-btn" onclick="doSignup()">إنشاء الحساب ✓</button>
-    </div>
+    <div class="login-hint">ليس لديك حساب؟ <a href="#" onclick="showToast('📩 سيتواصل معك فريقنا!')">تواصل معنا للتسجيل</a></div>
   </div>
 </div>
 
@@ -1319,69 +1295,6 @@ async function sendContactMsg() {
 window.openContactModal = openContactModal;
 window.closeContactModal = closeContactModal;
 window.sendContactMsg = sendContactMsg;
-
-
-// ═══════════════════════════════════════
-// SIGNUP
-// ═══════════════════════════════════════
-function showSignupForm() {
-  const m = document.getElementById('signup-modal');
-  m.style.display = 'flex';
-  setTimeout(() => m.classList.add('open'), 10);
-}
-
-function closeSignupForm() {
-  const m = document.getElementById('signup-modal');
-  m.classList.remove('open');
-  setTimeout(() => { m.style.display = 'none'; }, 300);
-}
-
-async function doSignup() {
-  const email = document.getElementById('signup-email').value.trim();
-  const password = document.getElementById('signup-password').value;
-  const storeName = document.getElementById('signup-store-name').value.trim();
-  const phone = document.getElementById('signup-phone').value.trim();
-  const whatsapp = document.getElementById('signup-whatsapp').value.trim();
-  const address = document.getElementById('signup-address').value.trim();
-
-  if (!email || !password || !storeName) { showToast('⚠️ يرجى تعبئة البريد وكلمة المرور واسم المتجر'); return; }
-  if (password.length < 6) { showToast('⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل'); return; }
-
-  const btn = document.getElementById('signup-submit-btn');
-  btn.disabled = true; btn.innerHTML = 'جاري التسجيل... <span class="spinner"></span>';
-
-  const { data, error } = await sb.auth.signUp({ email, password });
-
-  if (error) {
-    btn.disabled = false; btn.innerHTML = 'إنشاء الحساب ✓';
-    showToast('❌ ' + (error.message === 'User already registered' ? 'البريد مسجل مسبقاً' : error.message));
-    return;
-  }
-
-  // Create store record
-  if (data.user) {
-    await sb.from('stores').insert({
-      id: data.user.id,
-      name_ar: storeName,
-      phone: phone || null,
-      whatsapp: whatsapp || null,
-      address: address || null,
-      city: 'الرياض'
-    });
-    await sb.from('profiles').insert({
-      id: data.user.id,
-      role: 'merchant'
-    });
-  }
-
-  btn.disabled = false; btn.innerHTML = 'إنشاء الحساب ✓';
-  closeSignupForm();
-  showToast('🎉 تم إنشاء حسابك بنجاح! يمكنك تسجيل الدخول الآن');
-}
-
-window.showSignupForm = showSignupForm;
-window.closeSignupForm = closeSignupForm;
-window.doSignup = doSignup;
 
 function showToast(msg){const t=document.getElementById("toastEl");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800);}
 window.showToast=showToast;
