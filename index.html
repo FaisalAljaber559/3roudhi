@@ -427,6 +427,27 @@ button,input,select,textarea{font-family:"Cairo",sans-serif;}a{text-decoration:n
 .owner-cta-sub{font-size:14px;font-weight:700;color:rgba(255,255,255,0.70);display:flex;align-items:center;justify-content:center;gap:5px;}
 .owner-footer-row{display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,0.30);font-weight:600;padding-top:16px;margin-top:20px;border-top:1px solid rgba(255,255,255,0.06);flex-wrap:wrap;}
 
+/* SEARCH & ADVANCED FILTERS */
+.search-bar-wrap{margin-bottom:20px;}
+.search-bar{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:10px 16px;transition:border-color .2s,box-shadow .2s;}
+.search-bar:focus-within{border-color:var(--orange);box-shadow:0 0 0 3px var(--orangeP);}
+.search-icon{font-size:18px;opacity:.5;flex-shrink:0;}
+.search-input{flex:1;border:none;background:transparent;font-size:15px;font-family:"Cairo",sans-serif;color:var(--text);outline:none;}
+.search-input::placeholder{color:var(--dim);}
+.search-clear{background:none;border:none;font-size:16px;color:var(--dim);cursor:pointer;padding:2px 6px;border-radius:4px;transition:color .2s;}
+.search-clear:hover{color:var(--text);}
+.adv-filters-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:20px;padding:16px 20px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;}
+.adv-filter-group{display:flex;flex-direction:column;gap:8px;}
+.adv-filter-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.adv-chips{display:flex;gap:6px;flex-wrap:wrap;}
+.adv-chip{padding:5px 13px;border-radius:100px;background:var(--bg3);border:1.5px solid var(--border);font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;}
+.adv-chip:hover{border-color:var(--orange);color:var(--orange);}
+.adv-chip.active{background:var(--orange);border-color:var(--orange);color:#fff;}
+.price-range-wrap{padding:4px 0;}
+.price-range-wrap input[type=range]{width:200px;accent-color:var(--orange);}
+.search-results-info{font-size:13px;color:var(--muted);margin-bottom:16px;font-weight:600;}
+@media(max-width:768px){.adv-filters-row{flex-direction:column;gap:16px;}.price-range-wrap input[type=range]{width:100%;}}
+
 /* IMAGE UPLOAD */
 .img-tabs{display:flex;gap:0;background:var(--bg3);border-radius:8px;padding:3px;margin-bottom:12px;}
 .img-tab{flex:1;padding:7px;border-radius:6px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;text-align:center;transition:all .2s;}
@@ -535,6 +556,46 @@ button,input,select,textarea{font-family:"Cairo",sans-serif;}a{text-decoration:n
   </div>
 
   <div class="main-content">
+    <!-- شريط البحث -->
+    <div class="search-bar-wrap">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" type="text" id="search-input" placeholder="ابحث عن عرض... مثال: كنب، غرفة نوم" oninput="applyFilters()">
+        <button class="search-clear" id="search-clear" onclick="clearSearch()" style="display:none">✕</button>
+      </div>
+    </div>
+
+    <!-- فلاتر متقدمة -->
+    <div class="adv-filters-row">
+      <!-- الترتيب -->
+      <div class="adv-filter-group">
+        <label class="adv-filter-label">الترتيب</label>
+        <div class="adv-chips" id="sort-chips">
+          <div class="adv-chip active" onclick="setSort(this,'discount')">🔥 الأعلى خصماً</div>
+          <div class="adv-chip" onclick="setSort(this,'price_asc')">💰 الأرخص</div>
+          <div class="adv-chip" onclick="setSort(this,'price_desc')">💎 الأغلى</div>
+          <div class="adv-chip" onclick="setSort(this,'newest')">🆕 الأحدث</div>
+        </div>
+      </div>
+      <!-- الخصم -->
+      <div class="adv-filter-group">
+        <label class="adv-filter-label">نسبة الخصم</label>
+        <div class="adv-chips" id="disc-chips">
+          <div class="adv-chip active" onclick="setDisc(this,0)">الكل</div>
+          <div class="adv-chip" onclick="setDisc(this,30)">+30٪</div>
+          <div class="adv-chip" onclick="setDisc(this,40)">+40٪</div>
+          <div class="adv-chip" onclick="setDisc(this,50)">+50٪</div>
+        </div>
+      </div>
+      <!-- السعر -->
+      <div class="adv-filter-group">
+        <label class="adv-filter-label">السعر (ر.س) — <span id="price-range-label">الكل</span></label>
+        <div class="price-range-wrap">
+          <input type="range" id="price-max" min="500" max="20000" step="500" value="20000" oninput="onPriceRange(this)">
+        </div>
+      </div>
+    </div>
+
     <div class="filters-row">
       <div class="filter-chip active" onclick="filterCat(this,'all')"><span>🛒</span> الكل</div>
       <div class="filter-chip" onclick="filterCat(this,'living_room')"><span>🛋️</span> كنب</div>
@@ -899,12 +960,102 @@ function renderDeals(products){
   });
 }
 
-function filterCat(el,cat){
-  document.querySelectorAll(".filter-chip").forEach(c=>c.classList.remove("active"));
-  if(el)el.classList.add("active");
-  renderDeals(cat==="all"?allProducts:allProducts.filter(p=>p.category===cat));
+// ── فلاتر متقدمة ──────────────────────────────────────
+let currentCat = 'all';
+let currentSort = 'discount';
+let currentMinDisc = 0;
+let currentMaxPrice = 20000;
+let currentSearch = '';
+
+function applyFilters() {
+  const searchVal = document.getElementById('search-input').value.trim();
+  currentSearch = searchVal;
+  const clearBtn = document.getElementById('search-clear');
+  if (clearBtn) clearBtn.style.display = searchVal ? 'block' : 'none';
+
+  let results = [...allProducts];
+
+  // فلتر البحث
+  if (currentSearch) {
+    const q = currentSearch.toLowerCase();
+    results = results.filter(p =>
+      (p.name_ar && p.name_ar.toLowerCase().includes(q)) ||
+      (p.description && p.description.toLowerCase().includes(q))
+    );
+  }
+
+  // فلتر الفئة
+  if (currentCat !== 'all') results = results.filter(p => p.category === currentCat);
+
+  // فلتر الخصم
+  if (currentMinDisc > 0) {
+    results = results.filter(p => {
+      const disc = Math.round((1 - p.discounted_price / p.original_price) * 100);
+      return disc >= currentMinDisc;
+    });
+  }
+
+  // فلتر السعر
+  results = results.filter(p => p.discounted_price <= currentMaxPrice);
+
+  // الترتيب
+  if (currentSort === 'discount') results.sort((a,b) => (b.discount_percentage||0)-(a.discount_percentage||0));
+  else if (currentSort === 'price_asc') results.sort((a,b) => a.discounted_price - b.discounted_price);
+  else if (currentSort === 'price_desc') results.sort((a,b) => b.discounted_price - a.discounted_price);
+  else if (currentSort === 'newest') results.sort((a,b) => new Date(b.created_at)-new Date(a.created_at));
+
+  // عنوان النتائج
+  const header = document.querySelector('.hot-badge');
+  if (header) {
+    if (currentSearch) header.textContent = `${results.length} نتيجة`;
+    else if (currentSort === 'discount') header.textContent = 'الأعلى خصماً';
+    else if (currentSort === 'price_asc') header.textContent = 'الأرخص';
+    else if (currentSort === 'price_desc') header.textContent = 'الأغلى';
+    else header.textContent = 'الأحدث';
+  }
+
+  renderDeals(results);
 }
-function setOccTab(el){document.querySelectorAll(".occ-tab").forEach(t=>t.classList.remove("active"));el.classList.add("active");}
+
+function filterCat(el, cat) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  currentCat = cat;
+  applyFilters();
+}
+
+function setSort(el, sort) {
+  document.querySelectorAll('#sort-chips .adv-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  currentSort = sort;
+  applyFilters();
+}
+
+function setDisc(el, minDisc) {
+  document.querySelectorAll('#disc-chips .adv-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  currentMinDisc = minDisc;
+  applyFilters();
+}
+
+function onPriceRange(input) {
+  currentMaxPrice = parseInt(input.value);
+  const label = document.getElementById('price-range-label');
+  if (label) label.textContent = currentMaxPrice >= 20000 ? 'الكل' : `حتى ${currentMaxPrice.toLocaleString('ar-SA')} ر.س`;
+  applyFilters();
+}
+
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  currentSearch = '';
+  document.getElementById('search-clear').style.display = 'none';
+  applyFilters();
+}
+
+function setOccTab(el) {
+  document.querySelectorAll('.occ-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
 
 async function loadStores(){
   const{data:stores}=await sb.from("stores").select("*").limit(8);
